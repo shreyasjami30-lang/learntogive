@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-labelledby="t">
+  <!-- PLACEHOLDER portrait showing initials. Replace with a real photo before launch (see README). -->
+  <title id="t">Placeholder portrait: SG</title>
+  <rect width="160" height="160" fill="#F2A541"/>
+  <circle cx="128" cy="28" r="40" fill="#FFF8EE" opacity="0.18"/>
+  <text x="80" y="80" dy="0.35em" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#5A1F1B">SG</text>
+</svg>

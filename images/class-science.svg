@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+  <!-- PLACEHOLDER class icon: science -->
+  <rect width="64" height="64" rx="16" fill="#FCE9CF"/>
+  <path d="M26 12h12M28 12v16L15 49a4 4 0 0 0 3.5 6h27a4 4 0 0 0 3.5-6L36 28V12" fill="none" stroke="#5A1F1B" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M20 44h24l4 7a2 2 0 0 1-2 2H18a2 2 0 0 1-2-2z" fill="#F2A541"/>
+  <circle cx="28" cy="47" r="2.5" fill="#B84A33"/><circle cx="36" cy="49" r="2" fill="#B84A33"/>
+</svg>
