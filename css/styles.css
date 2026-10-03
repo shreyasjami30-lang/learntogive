@@ -439,7 +439,9 @@ main { display: block; }
 .feature-card img { margin-bottom: 0.75rem; }
 .feature-card p:last-child { margin-bottom: 0; }
 
-.link-arrow { font-weight: 800; display: inline-flex; align-items: center; min-height: var(--tap); gap: 0.35rem; }
+.link-arrow { font-weight: 800; display: inline-block; min-height: var(--tap); padding: 0.55rem 0; }
+/* The arrow stays attached to the last word when the link wraps (break-ui, Telugu). */
+.link-arrow::after { display: inline-block; margin-left: 0.35rem; }
 .link-arrow::after { content: '→'; transition: transform var(--dur-fast) ease; } /* Hover effect: 3px Translate nudge, pointer devices only. */
 
 /* ---------- Stats ---------- */
