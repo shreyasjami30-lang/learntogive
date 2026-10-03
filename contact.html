@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us | Learn To Give</title>
+  <meta name="description" content="Contact Learn To Give about joining a class, volunteering, donating, or any other question. Write to us in English or Telugu.">
+  <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
+  <link rel="canonical" href="https://www.example.com/contact.html">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#FFF8EE">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Learn To Give">
+  <meta property="og:title" content="Contact Us | Learn To Give">
+  <meta property="og:description" content="Contact Learn To Give about joining a class, volunteering, donating, or any other question. Write to us in English or Telugu.">
+  <meta property="og:url" content="https://www.example.com/contact.html">
+  <meta property="og:image" content="https://www.example.com/images/og-image.png">
+  <meta property="og:image:alt" content="Learn To Give: Learning that gives back.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact Us | Learn To Give">
+  <meta name="twitter:description" content="Contact Learn To Give about joining a class, volunteering, donating, or any other question. Write to us in English or Telugu.">
+  <meta name="twitter:image" content="https://www.example.com/images/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+Telugu:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="contact">
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
+
+  <header id="site-header" class="site-header">
+    <noscript>
+      <div class="container noscript-nav">
+        <p><a href="index.html"><strong>Learn To Give</strong></a></p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="classes.html">Classes</a></li>
+          <li><a href="join.html">Join a Class</a></li>
+          <li><a href="volunteer.html">Volunteer</a></li>
+          <li><a href="impact.html">Impact</a></li>
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <p class="noscript-note">Some parts of this site, like class times and figures, need JavaScript. You can always email us at <a href="mailto:info.learntogive@gmail.com">info.learntogive@gmail.com</a>.</p>
+      </div>
+    </noscript>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="page-hero" aria-labelledby="page-title">
+      <div class="container">
+        <h1 id="page-title" data-i18n="contact.title">Contact Us</h1>
+        <p class="lead" data-i18n="contact.intro">Questions about classes, volunteering, or donating? Send us a message.</p>
+        <p class="callout" data-flag="showContactLanguageNote" hidden data-i18n="contact.langNote">You can write to us in English or Telugu.</p>
+      </div>
+    </section>
+
+    <section class="section section--tint" aria-labelledby="page-title">
+      <div class="container">
+        <!-- action is the no-JavaScript fallback. js/main.js replaces it with SITE_CONFIG.forms.endpoint. -->
+        <form class="form-card" data-form="contact" data-success="contact-success" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" aria-labelledby="page-title">
+          <input type="hidden" name="_subject" value="New contact message">
+          <div class="honeypot" aria-hidden="true">
+            <label for="con-gotcha">Leave this field empty</label>
+            <input type="text" id="con-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="form-grid">
+            <p class="hint" data-i18n="form.requiredNote">Fields marked * are required.</p>
+            <div class="form-grid form-grid--2">
+              <div class="field">
+                <label for="con-name"><span data-i18n="form.name">Your name</span> <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="con-name" name="name" autocomplete="name" required aria-describedby="con-name-error">
+                <p class="field-error" id="con-name-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="con-email"><span data-i18n="form.email">Email</span> <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="con-email" name="email" autocomplete="email" required aria-describedby="con-email-error">
+                <p class="field-error" id="con-email-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="con-reason"><span data-i18n="contact.reason">Reason for writing</span> <span class="req" aria-hidden="true">*</span></label>
+              <select id="con-reason" name="reason" required data-preselect="reason" aria-describedby="con-reason-error">
+                <option value="" data-i18n="form.choose">Choose one</option>
+                <option value="Join a class" data-reason="join" data-i18n="contact.reasonJoin">Join a class</option>
+                <option value="Volunteer" data-reason="volunteer" data-i18n="contact.reasonVolunteer">Volunteer</option>
+                <option value="Donate" data-reason="donate" data-i18n="contact.reasonDonate">Donate</option>
+                <option value="General question" data-reason="general" data-i18n="contact.reasonGeneral">General question</option>
+              </select>
+              <p class="field-error" id="con-reason-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="con-message"><span data-i18n="form.message">Message</span> <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="con-message" name="message" rows="5" required aria-describedby="con-message-error"></textarea>
+              <p class="field-error" id="con-message-error" hidden></p>
+            </div>
+            <div class="form-failure" tabindex="-1" role="alert" hidden>
+              <p><strong data-i18n="form.failTitle">Sorry, something went wrong.</strong> <span data-i18n="form.failBody">Your message was not sent. Please try again, or email us directly:</span> <a data-mailto lang="en"></a></p>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary"><span class="btn-label" data-i18n="contact.submit">Send message</span></button>
+            </div>
+          </div>
+        </form>
+
+        <div class="form-success" id="contact-success" tabindex="-1" role="status" hidden>
+          <h2 data-i18n="contact.thanksTitle">Thanks for reaching out!</h2>
+          <p data-i18n="contact.thanksBody">We received your message and will reply by email.</p>
+        </div>
+
+        <div class="stack">
+          <p class="text-muted js-only"><span data-i18n="contact.emailAlt">Prefer email? Write to us at</span> <a data-mailto lang="en"></a></p>
+          <div data-show-if="socialLinks" hidden>
+            <h2 data-i18n="contact.socialTitle">Find us online</h2>
+            <ul data-render="social"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="site-footer">
+    <noscript>
+      <div class="container">
+        <p>We are a student-run group partnering with Sadhana Society for the Mentally Handicapped. We are not a registered charity and cannot offer tax receipts.</p>
+      </div>
+    </noscript>
+  </footer>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

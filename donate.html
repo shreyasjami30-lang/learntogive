@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donate | Learn To Give</title>
+  <meta name="description" content="Our classes are always free. Donations are optional and go to Sadhana Society for the Mentally Handicapped. Learn how donating works.">
+  <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
+  <link rel="canonical" href="https://www.example.com/donate.html">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#FFF8EE">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Learn To Give">
+  <meta property="og:title" content="Donate | Learn To Give">
+  <meta property="og:description" content="Our classes are always free. Donations are optional and go to Sadhana Society for the Mentally Handicapped. Learn how donating works.">
+  <meta property="og:url" content="https://www.example.com/donate.html">
+  <meta property="og:image" content="https://www.example.com/images/og-image.png">
+  <meta property="og:image:alt" content="Learn To Give: Learning that gives back.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Donate | Learn To Give">
+  <meta name="twitter:description" content="Our classes are always free. Donations are optional and go to Sadhana Society for the Mentally Handicapped. Learn how donating works.">
+  <meta name="twitter:image" content="https://www.example.com/images/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+Telugu:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="donate">
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
+
+  <header id="site-header" class="site-header">
+    <noscript>
+      <div class="container noscript-nav">
+        <p><a href="index.html"><strong>Learn To Give</strong></a></p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="classes.html">Classes</a></li>
+          <li><a href="join.html">Join a Class</a></li>
+          <li><a href="volunteer.html">Volunteer</a></li>
+          <li><a href="impact.html">Impact</a></li>
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <p class="noscript-note">Some parts of this site, like class times and figures, need JavaScript. You can always email us at <a href="mailto:info.learntogive@gmail.com">info.learntogive@gmail.com</a>.</p>
+      </div>
+    </noscript>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="page-hero" aria-labelledby="page-title">
+      <div class="container">
+        <h1 id="page-title" data-i18n="donate.title">Donate</h1>
+        <p class="lead" data-i18n="donate.lead">Our classes are always free. Donations are optional and support Sadhana Society.</p>
+      </div>
+    </section>
+
+    <section class="section section--tint" aria-labelledby="how-title">
+      <div class="container">
+        <h2 id="how-title" data-i18n="donate.howTitle">How donating works</h2>
+        <ol class="steps">
+          <li class="card step"><p data-i18n="donate.step1">You contact our team.</p></li>
+          <li class="card step"><p data-i18n="donate.step2">A founder sends you bank-transfer instructions privately.</p></li>
+          <li class="card step"><p data-i18n="donate.step3">The founder records your donation.</p></li>
+          <li class="card step"><p data-i18n="donate.step4">Once a meaningful amount has built up, we send the full donation amount to Sadhana.</p></li>
+        </ol>
+        <!-- Without JavaScript this is a link to the Contact page. With JavaScript it opens the dialog below. -->
+        <a class="btn btn-primary" href="contact.html?reason=donate" data-open-dialog="donate-dialog" aria-haspopup="dialog" data-i18n="donate.cta">Contact Us to Donate</a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="sadhana-title">
+      <div class="container">
+        <h2 id="sadhana-title" data-i18n="donate.aboutTitle">About Sadhana</h2>
+        <p class="section-intro"><strong lang="en" data-config="sadhana.name">Sadhana Society for the Mentally Handicapped</strong></p>
+        <p class="section-intro" data-config="sadhana.description">Sadhana serves children with intellectual and developmental disabilities through a residential home and training center. Their funding goes toward specialized medical care, physical therapy equipment, and self-help training tools.</p>
+        <p><a class="link-arrow" href="https://sadhanawelfare.org/" data-config-href="sadhana.url" target="_blank" rel="noopener"><span data-i18n="donate.aboutLink">Visit Sadhana's website</span><span class="visually-hidden" data-i18n="common.newTab">(opens in a new tab)</span></a></p>
+      </div>
+    </section>
+
+    <section class="section section--tint" aria-labelledby="stand-title">
+      <div class="container">
+        <h2 id="stand-title" data-i18n="donate.standTitle">Where donations stand</h2>
+        <div class="card-grid card-grid--2 js-only">
+          <!-- Money TRANSFERRED to Sadhana. Kept separate from total received. -->
+          <div class="card figure-card">
+            <p class="figure-line">
+              <span data-i18n="donation.transferred">Transferred to Sadhana so far:</span>
+              <span class="figure-amount" data-config="donations.transferredToSadhanaINR"></span>
+              <span lang="en">(<span data-config="donations.transferredApproxUSD"></span>)</span>
+            </p>
+            <p class="figure-meta" data-i18n="donation.lastUpdated"></p>
+          </div>
+          <!-- Total received: hidden until SITE_CONFIG.donations.totalReceived is set. -->
+          <div class="card figure-card" data-show-if="donations.totalReceived" hidden>
+            <p class="figure-line">
+              <span data-i18n="donation.totalReceived">Total received so far:</span>
+              <span class="figure-amount" data-config="donations.totalReceived"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="transparency-title">
+      <div class="container">
+        <div class="note-card">
+          <h2 id="transparency-title" data-i18n="donate.transparencyTitle">A friendly note on transparency</h2>
+          <p data-i18n="donate.transparencyBody">We are a student-run group, not a registered charity. That means we cannot offer tax receipts, and we do not make any claims that donations are tax-deductible. Every donation we receive goes to Sadhana.</p>
+        </div>
+      </div>
+    </section>
+
+    <dialog id="donate-dialog" aria-labelledby="donate-dialog-title">
+      <div class="dialog-inner">
+        <div class="dialog-head">
+          <h2 id="donate-dialog-title" data-i18n="donate.dialogTitle">Contact us to donate</h2>
+          <button type="button" class="dialog-close" data-close-dialog aria-label="Close" data-i18n-attr="aria-label:donate.close"><span aria-hidden="true">×</span></button>
+        </div>
+        <p data-i18n="donate.dialogIntro">Send us a note and a founder will email you privately with instructions. Please do not include any bank or card details here.</p>
+
+        <!-- No payment fields and no bank details, by design. -->
+        <form data-form="donate" data-success="donate-success" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" aria-labelledby="donate-dialog-title">
+          <input type="hidden" name="_subject" value="New donation inquiry">
+          <div class="honeypot" aria-hidden="true">
+            <label for="don-gotcha">Leave this field empty</label>
+            <input type="text" id="don-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="form-grid">
+            <p class="hint" data-i18n="form.requiredNote">Fields marked * are required.</p>
+            <div class="field">
+              <label for="don-name"><span data-i18n="form.name">Your name</span> <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="don-name" name="name" autocomplete="name" required aria-describedby="don-name-error">
+              <p class="field-error" id="don-name-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="don-email"><span data-i18n="form.email">Email</span> <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="don-email" name="email" autocomplete="email" required aria-describedby="don-email-error">
+              <p class="field-error" id="don-email-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="don-message"><span data-i18n="form.message">Message</span> <span class="optional" data-i18n="form.optional">(optional)</span></label>
+              <textarea id="don-message" name="message" rows="3"></textarea>
+            </div>
+            <div class="form-failure" tabindex="-1" role="alert" hidden>
+              <p><strong data-i18n="form.failTitle">Sorry, something went wrong.</strong> <span data-i18n="form.failBody">Your message was not sent. Please try again, or email us directly:</span> <a data-mailto lang="en"></a></p>
+            </div>
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary"><span class="btn-label" data-i18n="donate.submit">Send</span></button>
+            </div>
+          </div>
+        </form>
+
+        <div class="form-success" id="donate-success" tabindex="-1" role="status" hidden>
+          <h3 data-i18n="donate.thanksTitle">Thank you!</h3>
+          <p data-i18n="donate.thanksBody">We received your note. A founder will email you privately with instructions.</p>
+        </div>
+      </div>
+    </dialog>
+  </main>
+
+  <footer id="site-footer" class="site-footer">
+    <noscript>
+      <div class="container">
+        <p>We are a student-run group partnering with Sadhana Society for the Mentally Handicapped. We are not a registered charity and cannot offer tax receipts.</p>
+      </div>
+    </noscript>
+  </footer>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

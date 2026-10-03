@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" width="600" height="480" role="img" aria-labelledby="t">
+  <!-- PLACEHOLDER illustration. Replace before launch (see README). No photos of children. -->
+  <title id="t">Placeholder illustration: an online class on a laptop, with books and a pencil</title>
+  <circle cx="300" cy="250" r="210" fill="#FCE9CF"/>
+  <circle cx="500" cy="90" r="36" fill="#F2A541"/>
+  <g stroke="#F2A541" stroke-width="6" stroke-linecap="round">
+    <line x1="500" y1="34" x2="500" y2="18"/><line x1="556" y1="90" x2="572" y2="90"/>
+    <line x1="540" y1="50" x2="552" y2="38"/><line x1="460" y1="50" x2="448" y2="38"/>
+  </g>
+  <!-- laptop -->
+  <rect x="118" y="120" width="364" height="232" rx="18" fill="#5A1F1B"/>
+  <rect x="136" y="138" width="328" height="196" rx="8" fill="#FFF8EE"/>
+  <path d="M84 352h432l-26 34H110z" fill="#3B2A24"/>
+  <rect x="262" y="356" width="76" height="8" rx="4" fill="#6B5249"/>
+  <!-- video call grid (abstract tiles) -->
+  <rect x="150" y="152" width="96" height="76" rx="8" fill="#C8553D"/>
+  <rect x="252" y="152" width="96" height="76" rx="8" fill="#F2A541"/>
+  <rect x="354" y="152" width="96" height="76" rx="8" fill="#B84A33"/>
+  <rect x="150" y="236" width="96" height="76" rx="8" fill="#F2A541"/>
+  <rect x="252" y="236" width="96" height="76" rx="8" fill="#5A1F1B"/>
+  <rect x="354" y="236" width="96" height="76" rx="8" fill="#C8553D"/>
+  <g fill="#FFF8EE">
+    <circle cx="198" cy="182" r="14"/><path d="M174 218a24 18 0 0 1 48 0z"/>
+    <circle cx="300" cy="182" r="14"/><path d="M276 218a24 18 0 0 1 48 0z"/>
+    <circle cx="402" cy="182" r="14"/><path d="M378 218a24 18 0 0 1 48 0z"/>
+    <circle cx="198" cy="266" r="14"/><path d="M174 302a24 18 0 0 1 48 0z"/>
+    <circle cx="402" cy="266" r="14"/><path d="M378 302a24 18 0 0 1 48 0z"/>
+  </g>
+  <text x="300" y="285" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#FFF8EE">½ + ¼</text>
+  <!-- books -->
+  <rect x="40" y="380" width="150" height="26" rx="5" fill="#C8553D"/>
+  <rect x="52" y="354" width="130" height="26" rx="5" fill="#F2A541"/>
+  <rect x="46" y="328" width="140" height="26" rx="5" fill="#5A1F1B"/>
+  <!-- pencil -->
+  <g transform="rotate(-28 470 410)">
+    <rect x="400" y="398" width="130" height="22" rx="4" fill="#F2A541"/>
+    <rect x="400" y="398" width="18" height="22" fill="#C8553D"/>
+    <path d="M530 398l26 11-26 11z" fill="#FCE9CF"/><path d="M548 405l8 4-8 4z" fill="#3B2A24"/>
+  </g>
+  <g fill="#C8553D"><path d="M80 120l6 14 14 6-14 6-6 14-6-14-14-6 14-6z"/><path d="M540 220l4 9 9 4-9 4-4 9-4-9-9-4 9-4z"/></g>
+</svg>
