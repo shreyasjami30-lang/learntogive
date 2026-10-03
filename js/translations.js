@@ -148,6 +148,11 @@ window.TRANSLATIONS = {
     'classes.lookTitle': 'How a class looks',
     'classes.lookBody': 'Every class is a live Zoom call. Two volunteer tutors share a page from the curriculum packet on screen and work through the problems together with the students.',
     'classes.lookAlt': 'Illustration of a Zoom class: a shared lesson slide on fractions, with two tutor tiles showing initials and a chat panel.',
+    'classes.lookWindowTitle': '4th Grade Math, Telugu version',
+    'classes.lookKicker': 'Curriculum packet',
+    'classes.lookSlideTitle': 'Fractions: what is ¾?',
+    'classes.lookSlideBody': '3 of 4 equal parts are shaded.',
+    'classes.lookTutor': 'Tutor',
     'classes.galleryTitle': 'Photos',
     'classes.samplesTitle': 'A look inside our curriculum packets',
     'classes.samplesIntro': 'Every student works from their own packet. These sample pages have all student information removed.',
@@ -186,7 +191,8 @@ window.TRANSLATIONS = {
     'classes.coming2': 'More rigorous material',
     'classes.coming3': 'More age groups',
     'classes.ctaTitle': 'Ready to join?',
-    'classes.ctaButton': 'Sign up for a class',
+    'classes.ctaButton': 'See how to join',
+    'classes.listTitle': 'Class details',
 
     /* ---------- Forms (shared) ---------- */
     'form.requiredNote': 'Fields marked * are required.',
@@ -546,6 +552,11 @@ window.TRANSLATIONS = {
     'classes.lookTitle': 'తరగతి ఎలా ఉంటుంది',
     'classes.lookBody': 'ప్రతి తరగతి ప్రత్యక్ష జూమ్ కాల్. ఇద్దరు వాలంటీర్ ట్యూటర్లు పాఠ్య ప్యాకెట్‌లోని ఒక పేజీని తెరపై చూపించి, విద్యార్థులతో కలిసి సమస్యలను చేస్తారు.',
     'classes.lookAlt': 'జూమ్ తరగతి చిత్రం: భిన్నాలపై పంచుకున్న పాఠం స్లైడ్, అక్షరాలు మాత్రమే చూపే ఇద్దరు ట్యూటర్ల టైల్స్ మరియు చాట్ ప్యానెల్.',
+    'classes.lookWindowTitle': '4వ తరగతి గణితం, తెలుగు వెర్షన్',
+    'classes.lookKicker': 'పాఠ్య ప్యాకెట్',
+    'classes.lookSlideTitle': 'భిన్నాలు: ¾ అంటే ఏమిటి?',
+    'classes.lookSlideBody': '4 సమాన భాగాలలో 3 భాగాలకు రంగు వేశాం.',
+    'classes.lookTutor': 'ట్యూటర్',
     'classes.galleryTitle': 'ఫోటోలు',
     'classes.samplesTitle': 'మా పాఠ్య ప్యాకెట్లలో ఒక చూపు',
     'classes.samplesIntro': 'ప్రతి విద్యార్థి తమ సొంత ప్యాకెట్‌తో నేర్చుకుంటారు. ఈ నమూనా పేజీల నుండి విద్యార్థుల వివరాలన్నీ తొలగించాం.',
@@ -584,7 +595,8 @@ window.TRANSLATIONS = {
     'classes.coming2': 'మరింత లోతైన పాఠ్యాంశం',
     'classes.coming3': 'మరిన్ని వయస్సుల వారికి తరగతులు',
     'classes.ctaTitle': 'చేరడానికి సిద్ధంగా ఉన్నారా?',
-    'classes.ctaButton': 'తరగతి కోసం నమోదు చేయండి',
+    'classes.ctaButton': 'ఎలా చేరాలో చూడండి',
+    'classes.listTitle': 'తరగతి వివరాలు',
 
     /* ---------- Forms (shared) ---------- */
     'form.requiredNote': '* గుర్తు ఉన్న వివరాలు తప్పనిసరి.',

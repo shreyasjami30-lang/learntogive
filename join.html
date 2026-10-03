@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Join a Class | Learn To Give</title>
-  <meta name="description" content="Parents and guardians can sign up a 4th or 5th grader for a free Learn To Give class on Zoom, in Telugu or English.">
+  <meta name="description" content="How Learn To Give classes work and how to enroll: free, year-long Zoom classes for 4th and 5th graders in Telugu or English.">
   <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
   <link rel="canonical" href="https://www.example.com/join.html">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Learn To Give">
   <meta property="og:title" content="Join a Class | Learn To Give">
-  <meta property="og:description" content="Parents and guardians can sign up a 4th or 5th grader for a free Learn To Give class on Zoom, in Telugu or English.">
+  <meta property="og:description" content="How Learn To Give classes work and how to enroll: free, year-long Zoom classes for 4th and 5th graders in Telugu or English.">
   <meta property="og:url" content="https://www.example.com/join.html">
   <meta property="og:image" content="https://www.example.com/images/og-image.png">
   <meta property="og:image:type" content="image/png">
@@ -25,7 +25,7 @@
   <meta name="twitter:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Join a Class | Learn To Give">
-  <meta name="twitter:description" content="Parents and guardians can sign up a 4th or 5th grader for a free Learn To Give class on Zoom, in Telugu or English.">
+  <meta name="twitter:description" content="How Learn To Give classes work and how to enroll: free, year-long Zoom classes for 4th and 5th graders in Telugu or English.">
   <meta name="twitter:image" content="https://www.example.com/images/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,120 +59,73 @@
     <section class="page-hero" aria-labelledby="page-title">
       <div class="container">
         <h1 id="page-title" data-i18n="join.title">Join a Class</h1>
-        <p class="lead" data-i18n="join.intro">This form is for parents and guardians. Classes are free. After you sign up, our team will email you the Zoom details.</p>
+        <p class="lead" data-i18n="join.intro">Free, live classes on Zoom for 4th and 5th graders, in Telugu or English. Here is what a parent or guardian needs to know before signing up.</p>
+        <!-- Goes to the Google Form (SITE_CONFIG.signupFormUrl) once it is a real https:// link; until then, to contact.html. -->
+        <div class="btn-row"><a class="btn btn-primary" href="contact.html?reason=join" data-render="signup-link"><span data-i18n="join.cta">Sign up for a class</span><span class="visually-hidden new-tab-note" data-i18n="common.newTab" hidden>(opens in a new tab)</span></a></div>
       </div>
     </section>
 
-    <section class="section section--tint" aria-labelledby="page-title">
+    <section class="section section--tint" aria-labelledby="join-classes-title">
       <div class="container">
-        <!-- action is the no-JavaScript fallback. js/main.js replaces it with SITE_CONFIG.forms.endpoint. -->
-        <form class="form-card" data-form="join" data-success="join-success" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" aria-labelledby="page-title">
-          <input type="hidden" name="_subject" value="New class signup">
-          <div class="honeypot" aria-hidden="true">
-            <label for="join-gotcha">Leave this field empty</label>
-            <input type="text" id="join-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+        <h2 id="join-classes-title" data-i18n="join.classesTitle">Our classes</h2>
+        <!-- Short cards rendered from SITE_CONFIG.classes. -->
+        <ul class="card-grid summary-grid" data-render="class-summary">
+          <li class="card summary-card"><h3 class="class-name">4th Grade Math</h3></li>
+          <li class="card summary-card"><h3 class="class-name">5th Grade Math</h3></li>
+          <li class="card summary-card"><h3 class="class-name">4th Grade Science</h3><p class="class-focus">Focus: Environmental Science</p></li>
+          <li class="card summary-card"><h3 class="class-name">5th Grade Science</h3><p class="class-focus">Focus: Life Science</p></li>
+          <li class="card summary-card"><h3 class="class-name">Intro to Python</h3></li>
+        </ul>
+        <p><a class="link-arrow" href="classes.html" data-i18n="join.classesLink">See topics and class times</a></p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="join-how-title">
+      <div class="container">
+        <h2 id="join-how-title" data-i18n="join.howTitle">How classes work</h2>
+        <ul class="info-list">
+          <li data-i18n="classes.howYear">Classes are year-long and follow the Indian school year, from June to April.</li>
+          <li data-i18n="classes.howJoinAnytime">Students can join at any time and follow along from wherever the class currently is.</li>
+          <li data-i18n="classes.howLanguage">At sign-up, families choose English or Telugu. Every class has both versions, and each version has its own meeting time. Every tutor speaks both languages.</li>
+          <li data-i18n="classes.howDiscord" data-show-if="discord.enabled">All communication with students, parents, and tutors happens on our Discord server. Families get access after their sign-up is processed.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section--tint" aria-labelledby="enroll-title">
+      <div class="container">
+        <h2 id="enroll-title" data-i18n="join.enrollTitle">How to enroll</h2>
+        <ol class="steps">
+          <li class="card step"><p data-i18n="join.step1">A parent or guardian fills out the Google Form.</p></li>
+          <li class="card step"><p data-i18n="join.step2">Our team processes the sign-up.</p></li>
+          <li class="card step"><p data-i18n="join.step3">We add your family to our Discord server and send the information you need to have your child join.</p></li>
+          <li class="card step"><p data-i18n="join.step4">Your child joins the class where it currently is.</p></li>
+        </ol>
+        <p class="privacy-line" data-i18n="join.privacy">We collect only what we need to run the class and never publish children's names or photos. A parent or guardian must complete the form and give consent.</p>
+        <div class="btn-row"><a class="btn btn-primary" href="contact.html?reason=join" data-render="signup-link"><span data-i18n="join.cta">Sign up for a class</span><span class="visually-hidden new-tab-note" data-i18n="common.newTab" hidden>(opens in a new tab)</span></a></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="join-faq-title">
+      <div class="container">
+        <h2 id="join-faq-title" data-i18n="join.faqTitle">Questions families ask</h2>
+        <div class="accordion">
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="join-faq-10-btn" aria-expanded="true" aria-controls="join-faq-10"><span data-i18n="faq.q10">Can we join partway through the year?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="join-faq-10" role="region" aria-labelledby="join-faq-10-btn"><p data-i18n="faq.a10">Yes. Students can join at any time and follow along from wherever the class currently is.</p></div>
           </div>
-
-          <div class="form-grid">
-            <p class="hint" data-i18n="form.requiredNote">Fields marked * are required.</p>
-
-            <div class="form-grid form-grid--2">
-              <div class="field">
-                <label for="join-parent"><span data-i18n="join.parentName">Parent or guardian name</span> <span class="req" aria-hidden="true">*</span></label>
-                <input type="text" id="join-parent" name="parent_name" autocomplete="name" required aria-describedby="join-parent-error">
-                <p class="field-error" id="join-parent-error" hidden></p>
-              </div>
-              <div class="field">
-                <label for="join-email"><span data-i18n="form.email">Email</span> <span class="req" aria-hidden="true">*</span></label>
-                <input type="email" id="join-email" name="email" autocomplete="email" required aria-describedby="join-email-error">
-                <p class="field-error" id="join-email-error" hidden></p>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="join-phone"><span data-i18n="join.phone">Phone or WhatsApp</span> <span class="optional" data-i18n="form.optional">(optional)</span></label>
-              <input type="tel" id="join-phone" name="phone" autocomplete="tel" data-validate="phone" aria-describedby="join-phone-error">
-              <p class="field-error" id="join-phone-error" hidden></p>
-            </div>
-
-            <div class="field">
-              <label for="join-child"><span data-i18n="join.childName">Child's first name</span> <span class="req" aria-hidden="true">*</span></label>
-              <p class="hint" id="join-child-hint" data-i18n="join.childNameHint">First name only, please.</p>
-              <input type="text" id="join-child" name="child_first_name" autocomplete="off" maxlength="40" required aria-describedby="join-child-hint join-child-error">
-              <p class="field-error" id="join-child-error" hidden></p>
-            </div>
-
-            <fieldset class="field" id="join-grade" data-required-group="radio">
-              <legend><span data-i18n="join.grade">Child's grade</span> <span class="req" aria-hidden="true">*</span></legend>
-              <div class="choice-group choice-group--inline">
-                <label class="choice"><input type="radio" name="child_grade" value="4th grade" required aria-describedby="join-grade-error"> <span data-i18n="join.grade4">4th grade</span></label>
-                <label class="choice"><input type="radio" name="child_grade" value="5th grade" required aria-describedby="join-grade-error"> <span data-i18n="join.grade5">5th grade</span></label>
-              </div>
-              <p class="field-error" id="join-grade-error" hidden></p>
-            </fieldset>
-
-            <div class="field">
-              <label for="join-class"><span data-i18n="join.class">Class</span> <span class="req" aria-hidden="true">*</span></label>
-              <!-- Options are rebuilt from SITE_CONFIG.classes. These static options are the no-JavaScript fallback. -->
-              <select id="join-class" name="class" required data-render="class-options" aria-describedby="join-class-error">
-                <option value="">Choose one</option>
-                <option value="4th Grade Math" data-class-id="math-4">4th Grade Math</option>
-                <option value="5th Grade Math" data-class-id="math-5">5th Grade Math</option>
-                <option value="4th Grade Science" data-class-id="science-4">4th Grade Science</option>
-                <option value="5th Grade Science" data-class-id="science-5">5th Grade Science</option>
-                <option value="Intro to Python" data-class-id="python">Intro to Python</option>
-              </select>
-              <p class="field-error" id="join-class-error" hidden></p>
-            </div>
-
-            <fieldset class="field" id="join-language" data-required-group="radio">
-              <legend><span data-i18n="join.language">Preferred language</span> <span class="req" aria-hidden="true">*</span></legend>
-              <div class="choice-group choice-group--inline">
-                <label class="choice"><input type="radio" name="language" value="Telugu" required aria-describedby="join-language-error"> <span data-i18n="lang:Telugu">Telugu</span></label>
-                <label class="choice"><input type="radio" name="language" value="English" required aria-describedby="join-language-error"> <span data-i18n="lang:English">English</span></label>
-              </div>
-              <p class="field-error" id="join-language-error" hidden></p>
-            </fieldset>
-
-            <div class="field">
-              <label for="join-city"><span data-i18n="join.city">City</span> <span class="req" aria-hidden="true">*</span></label>
-              <select id="join-city" name="city" required aria-describedby="join-city-error">
-                <option value="" data-i18n="form.choose">Choose one</option>
-                <option value="Hyderabad" data-i18n="city:Hyderabad">Hyderabad</option>
-                <option value="Vijayawada" data-i18n="city:Vijayawada">Vijayawada</option>
-                <option value="Other" data-i18n="join.cityOther">Other</option>
-              </select>
-              <p class="field-error" id="join-city-error" hidden></p>
-            </div>
-
-            <div class="field">
-              <label for="join-questions"><span data-i18n="join.questions">Questions or notes</span> <span class="optional" data-i18n="form.optional">(optional)</span></label>
-              <textarea id="join-questions" name="questions" rows="4"></textarea>
-            </div>
-
-            <div class="field">
-              <label class="consent">
-                <input type="checkbox" id="join-consent" name="consent" value="Yes" required aria-describedby="join-consent-error">
-                <span><span data-i18n="join.consent">I am the parent or guardian and I consent to my child attending online classes with Learn To Give.</span> <span class="req" aria-hidden="true">*</span></span>
-              </label>
-              <p class="field-error" id="join-consent-error" hidden></p>
-            </div>
-
-            <p class="privacy-line" data-i18n="join.privacy">We collect only what we need to run the class. We never publish children's names or photos.</p>
-
-            <div class="form-failure" tabindex="-1" role="alert" hidden>
-              <p><strong data-i18n="form.failTitle">Sorry, something went wrong.</strong> <span data-i18n="form.failBody">Your message was not sent. Please try again, or email us directly:</span> <a data-mailto lang="en"></a></p>
-            </div>
-
-            <div>
-              <button type="submit" class="btn btn-primary"><span class="btn-label" data-i18n="join.submit">Send sign-up</span></button>
-            </div>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="join-faq-6-btn" aria-expanded="true" aria-controls="join-faq-6"><span data-i18n="faq.q6">Which language should we pick?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="join-faq-6" role="region" aria-labelledby="join-faq-6-btn"><p data-i18n="faq.a6">Pick the language your child is most comfortable learning in. You choose at sign-up. Both versions follow the same curriculum, and every tutor speaks both languages.</p></div>
           </div>
-        </form>
-
-        <div class="form-success" id="join-success" tabindex="-1" role="status" hidden>
-          <h2 data-i18n="join.thanksTitle">Thank you for signing up!</h2>
-          <p data-i18n="join.thanksBody">We received your sign-up. Our team will email you the Zoom details.</p>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="join-faq-11-btn" aria-expanded="true" aria-controls="join-faq-11"><span data-i18n="faq.q11">Can my child take two classes?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="join-faq-11" role="region" aria-labelledby="join-faq-11-btn"><p data-i18n="faq.a11">Yes. The English version of one subject meets at the same time as the Telugu version of the other subject, then they trade. If you pick the same language for both classes, the times never overlap.</p></div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="join-faq-8-btn" aria-expanded="true" aria-controls="join-faq-8"><span data-i18n="faq.q8">Are the classes really free?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="join-faq-8" role="region" aria-labelledby="join-faq-8-btn"><p data-i18n="faq.a8">Yes. Classes are free for every student. Our tutors are volunteers and nobody is paid. Donations are optional.</p></div>
+          </div>
         </div>
       </div>
     </section>

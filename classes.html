@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Free Classes | Learn To Give</title>
-  <meta name="description" content="Free weekly Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Class times in IST.">
+  <meta name="description" content="Free, year-long Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Weekly schedule in IST.">
   <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
   <link rel="canonical" href="https://www.example.com/classes.html">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Learn To Give">
   <meta property="og:title" content="Free Classes | Learn To Give">
-  <meta property="og:description" content="Free weekly Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Class times in IST.">
+  <meta property="og:description" content="Free, year-long Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Weekly schedule in IST.">
   <meta property="og:url" content="https://www.example.com/classes.html">
   <meta property="og:image" content="https://www.example.com/images/og-image.png">
   <meta property="og:image:type" content="image/png">
@@ -25,7 +25,7 @@
   <meta name="twitter:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Classes | Learn To Give">
-  <meta name="twitter:description" content="Free weekly Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Class times in IST.">
+  <meta name="twitter:description" content="Free, year-long Zoom classes in math, science, and Intro to Python for 4th and 5th graders, taught in Telugu and English. Weekly schedule in IST.">
   <meta name="twitter:image" content="https://www.example.com/images/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,17 +63,24 @@
       </div>
     </section>
 
-    <section class="section section--tint" aria-labelledby="class-list-title">
+    <section class="section section--tint" aria-labelledby="schedule-title">
       <div class="container">
-        <h2 id="class-list-title" class="visually-hidden" data-i18n="classes.times">Class times</h2>
-        <div class="filter-bar" role="group" aria-labelledby="filter-label">
+        <!-- The filter applies to the schedule table and to the times on every class card. -->
+        <div class="filter-bar js-only" role="group" aria-labelledby="filter-label">
           <p id="filter-label" class="filter-label" data-i18n="classes.filterLabel">Show class times in:</p>
           <button type="button" class="filter-btn" data-filter="all" aria-pressed="true" data-i18n="classes.filterAll">All</button>
           <button type="button" class="filter-btn" data-filter="Telugu" aria-pressed="false" data-i18n="lang:Telugu">Telugu</button>
           <button type="button" class="filter-btn" data-filter="English" aria-pressed="false" data-i18n="lang:English">English</button>
         </div>
+
+        <h2 id="schedule-title" data-i18n="schedule.title">Weekly schedule at a glance</h2>
+        <p class="schedule-note js-only" data-i18n="schedule.note">Taking two subjects? Pick the same language for both and your times never overlap.</p>
+        <!-- Generated from SITE_CONFIG.classes. On phones the table scrolls inside this box, not the page. -->
+        <div class="table-scroll js-only" role="region" aria-labelledby="schedule-title" tabindex="0" data-render="schedule"></div>
+
+        <h2 id="class-list-title" class="class-list-title" data-i18n="classes.listTitle">Class details</h2>
         <!-- Class cards are rendered from SITE_CONFIG.classes in js/site-config.js -->
-        <ul class="class-list" data-render="classes"></ul>
+        <ul class="class-list" data-render="classes" aria-labelledby="class-list-title"></ul>
       </div>
     </section>
 
@@ -82,14 +89,54 @@
         <h2 id="how-title" data-i18n="classes.howTitle">How classes work</h2>
         <ul class="info-list">
           <li data-i18n="classes.howZoom">Classes happen live on Zoom, one hour per week, as a year-long program.</li>
+          <li data-i18n="classes.howYear">Classes are year-long and follow the Indian school year, from June to April.</li>
+          <li data-i18n="classes.howJoinAnytime">Students can join at any time and follow along from wherever the class currently is.</li>
+          <li data-i18n="classes.howLanguage">At sign-up, families choose English or Telugu. Every class has both versions, and each version has its own meeting time. Every tutor speaks both languages.</li>
           <li data-i18n="classes.howPacket">Each student gets their own curriculum packet, and tutors go over its problems in class.</li>
           <li data-i18n="classes.howHomework">There is homework every week. It usually takes about 2 to 3 hours a week, depending on the student and the rigor of the class.</li>
           <li data-i18n="classes.howTutors">Two volunteer tutors are present in every session.</li>
           <li data-i18n="classes.howFree">Tuition is free. Donations are optional.</li>
-          <li data-i18n="classes.howSignup">A parent or guardian completes the sign-up form and gives consent. Then our team emails the Zoom details.</li>
+          <li data-i18n="classes.howSignup">A parent or guardian fills out the sign-up form and gives consent. Our team processes the sign-up, then adds your family to our Discord server.</li>
+          <li data-i18n="classes.howDiscord" data-show-if="discord.enabled">All communication with students, parents, and tutors happens on our Discord server. Families get access after their sign-up is processed.</li>
         </ul>
       </div>
     </section>
+
+    <section class="section section--tint" aria-labelledby="look-title">
+      <div class="container class-look">
+        <div>
+          <h2 id="look-title" data-i18n="classes.lookTitle">How a class looks</h2>
+          <p class="section-intro" data-i18n="classes.lookBody">Every class is a live Zoom call. Two volunteer tutors share a page from the curriculum packet on screen and work through the problems together with the students.</p>
+        </div>
+        <!-- Illustration built in HTML/CSS (chosen with the prototype skill over an SVG version, because its text
+             translates and it reflows on phones). Tutors are shown as initials only. No children, no faces. -->
+        <figure class="cw" role="img" aria-label="Illustration of a Zoom class: a shared lesson slide on fractions, with two tutor tiles showing initials and a chat panel." data-i18n-attr="aria-label:classes.lookAlt">
+          <div class="cw-bar" aria-hidden="true"><span class="cw-dots"><i></i><i></i><i></i></span><span class="cw-title" data-i18n="classes.lookWindowTitle">4th Grade Math, Telugu version</span></div>
+          <div class="cw-body" aria-hidden="true">
+            <div class="cw-slide">
+              <p class="cw-slide-kicker" data-i18n="classes.lookKicker">Curriculum packet</p>
+              <p class="cw-slide-title" data-i18n="classes.lookSlideTitle">Fractions: what is ¾?</p>
+              <div class="cw-bar-model"><span></span><span></span><span></span><span></span></div>
+              <p class="cw-slide-q" data-i18n="classes.lookSlideBody">3 of 4 equal parts are shaded.</p>
+            </div>
+            <div class="cw-side">
+              <div class="cw-tiles">
+                <div class="cw-tile is-speaking"><span class="cw-initials">A</span><span class="cw-name" data-i18n="classes.lookTutor">Tutor</span></div>
+                <div class="cw-tile"><span class="cw-initials">B</span><span class="cw-name" data-i18n="classes.lookTutor">Tutor</span></div>
+              </div>
+              <div class="cw-chat"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="cw-tools" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Gallery: only added when SITE_CONFIG.images.gallery has photos. Nothing is rendered by default. -->
+    <div data-render="gallery"></div>
+
+    <!-- Curriculum packet samples: only added when SITE_CONFIG.curriculumSamples has entries. -->
+    <div data-render="samples"></div>
 
     <section class="section section--tint" aria-labelledby="faq-title">
       <div class="container">
@@ -97,7 +144,19 @@
         <div class="accordion">
           <div class="accordion-item">
             <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-1-btn" aria-expanded="true" aria-controls="faq-1"><span data-i18n="faq.q1">How long does the program run?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
-            <div class="accordion-panel" id="faq-1" role="region" aria-labelledby="faq-1-btn"><p data-i18n="faq.a1">It is a year-long program. Each class meets once a week for one hour.</p></div>
+            <div class="accordion-panel" id="faq-1" role="region" aria-labelledby="faq-1-btn"><p data-i18n="faq.a1">It is a year-long program that follows the Indian school year, from June to April. Each class meets once a week for one hour.</p></div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-10-btn" aria-expanded="true" aria-controls="faq-10"><span data-i18n="faq.q10">Can we join partway through the year?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="faq-10" role="region" aria-labelledby="faq-10-btn"><p data-i18n="faq.a10">Yes. Students can join at any time and follow along from wherever the class currently is.</p></div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-6-btn" aria-expanded="true" aria-controls="faq-6"><span data-i18n="faq.q6">Which language should we pick?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="faq-6" role="region" aria-labelledby="faq-6-btn"><p data-i18n="faq.a6">Pick the language your child is most comfortable learning in. You choose at sign-up. Both versions follow the same curriculum, and every tutor speaks both languages.</p></div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-11-btn" aria-expanded="true" aria-controls="faq-11"><span data-i18n="faq.q11">Can my child take two classes?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="faq-11" role="region" aria-labelledby="faq-11-btn"><p data-i18n="faq.a11">Yes. The English version of one subject meets at the same time as the Telugu version of the other subject, then they trade. If you pick the same language for both classes, the times never overlap.</p></div>
           </div>
           <div class="accordion-item">
             <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-2-btn" aria-expanded="true" aria-controls="faq-2"><span data-i18n="faq.q2">What does homework look like?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
@@ -109,15 +168,15 @@
           </div>
           <div class="accordion-item">
             <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-4-btn" aria-expanded="true" aria-controls="faq-4"><span data-i18n="faq.q4">What happens if my child misses a session?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
-            <div class="accordion-panel" id="faq-4" role="region" aria-labelledby="faq-4-btn"><p data-i18n="faq.a4">Please email us if your child will miss a class. The curriculum packet helps students catch up, and they can bring questions to the next session.</p></div>
+            <div class="accordion-panel" id="faq-4" role="region" aria-labelledby="faq-4-btn"><p data-i18n="faq.a4">Please let us know on our Discord server if your child will miss a class. The curriculum packet helps students catch up, and they can bring questions to the next session.</p></div>
           </div>
           <div class="accordion-item">
             <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-5-btn" aria-expanded="true" aria-controls="faq-5"><span data-i18n="faq.q5">How do families join?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
-            <div class="accordion-panel" id="faq-5" role="region" aria-labelledby="faq-5-btn"><p data-i18n="faq.a5">A parent or guardian fills out the Join a Class form and gives consent. Then our team emails the Zoom details.</p></div>
+            <div class="accordion-panel" id="faq-5" role="region" aria-labelledby="faq-5-btn"><p data-i18n="faq.a5">A parent or guardian fills out our sign-up form and gives consent. Our team processes the sign-up, then adds your family to our Discord server and sends the information you need to join.</p></div>
           </div>
-          <div class="accordion-item">
-            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-6-btn" aria-expanded="true" aria-controls="faq-6"><span data-i18n="faq.q6">Which language should we pick?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
-            <div class="accordion-panel" id="faq-6" role="region" aria-labelledby="faq-6-btn"><p data-i18n="faq.a6">Pick the language your child is most comfortable learning in. Both versions follow the same curriculum.</p></div>
+          <div class="accordion-item" data-show-if="discord.enabled">
+            <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-12-btn" aria-expanded="true" aria-controls="faq-12"><span data-i18n="faq.q12">How do families and tutors stay in touch?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
+            <div class="accordion-panel" id="faq-12" role="region" aria-labelledby="faq-12-btn"><p data-i18n="faq.a12">All communication with students, parents, and tutors happens on our Discord server. Your family gets access after your sign-up is processed, so we never post an invite link publicly.</p></div>
           </div>
           <div class="accordion-item">
             <h3 class="accordion-heading"><button type="button" class="accordion-trigger" id="faq-7-btn" aria-expanded="true" aria-controls="faq-7"><span data-i18n="faq.q7">Can my child switch versions later?</span><span class="accordion-icon" aria-hidden="true"></span></button></h3>
@@ -146,7 +205,7 @@
         </ul>
         <div class="banner">
           <h2 data-i18n="classes.ctaTitle">Ready to join?</h2>
-          <a class="btn btn-secondary" href="join.html" data-i18n="classes.ctaButton">Sign up for a class</a>
+          <a class="btn btn-secondary" href="join.html" data-i18n="classes.ctaButton">See how to join</a>
         </div>
       </div>
     </section>

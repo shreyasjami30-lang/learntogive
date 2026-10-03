@@ -61,6 +61,8 @@
         <h1 id="page-title" data-i18n="contact.title">Contact Us</h1>
         <p class="lead" data-i18n="contact.intro">Questions about classes, volunteering, or donating? Send us a message.</p>
         <p class="callout" data-flag="showContactLanguageNote" hidden data-i18n="contact.langNote">You can write to us in English or Telugu.</p>
+        <!-- Hidden when SITE_CONFIG.discord.enabled is false. There is never a public Discord invite link. -->
+        <p class="discord-note" data-show-if="discord.enabled" data-i18n="contact.discordNote">Enrolled families and tutors use Discord. Questions before joining: use this form or email us.</p>
       </div>
     </section>
 
