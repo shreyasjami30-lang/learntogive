@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>About Us | Learn To Give</title>
   <meta name="description" content="Meet the three high school students who founded Learn To Give, a volunteer tutoring group teaching 4th and 5th graders in Hyderabad and Vijayawada over Zoom.">
   <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
   <link rel="canonical" href="https://www.example.com/about.html">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <!-- The site has one light theme, so one theme-color (the header's cream) is correct for both OS schemes. -->
   <meta name="theme-color" content="#FFF8EE">
+  <meta name="color-scheme" content="light">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Learn To Give">
   <meta property="og:title" content="About Us | Learn To Give">
   <meta property="og:description" content="Meet the three high school students who founded Learn To Give, a volunteer tutoring group teaching 4th and 5th graders in Hyderabad and Vijayawada over Zoom.">
   <meta property="og:url" content="https://www.example.com/about.html">
   <meta property="og:image" content="https://www.example.com/images/og-image.png">
-  <meta property="og:image:alt" content="Learn To Give: Learning that gives back.">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
+  <meta name="twitter:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="About Us | Learn To Give">
   <meta name="twitter:description" content="Meet the three high school students who founded Learn To Give, a volunteer tutoring group teaching 4th and 5th graders in Hyderabad and Vijayawada over Zoom.">
@@ -40,6 +47,7 @@
           <li><a href="volunteer.html">Volunteer</a></li>
           <li><a href="impact.html">Impact</a></li>
           <li><a href="donate.html">Donate</a></li>
+          <li><a href="fundraise.html">Fundraise</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
         <p class="noscript-note">Some parts of this site, like class times and figures, need JavaScript. You can always email us at <a href="mailto:info.learntogive@gmail.com">info.learntogive@gmail.com</a>.</p>
@@ -68,11 +76,10 @@
     <section class="section" aria-labelledby="story-title">
       <div class="container">
         <h2 id="story-title" data-i18n="about.storyTitle">Why we started this</h2>
-        <!-- The founders' story stays in English (lang="en") in both languages until a real translation exists. -->
+        <!-- The founders' story stays in English (lang="en") in both languages until a real translation exists.
+             Its text lives in js/translations.js under "about.story". This copy is the no-JavaScript fallback. -->
         <div class="story" lang="en">
-          <!-- NEEDS FOUNDER CONFIRMATION: the first sentence below refers to two of the three founders. -->
-          <p>Two of us are daughters of immigrants with roots in Hyderabad and Vijayawada. Our families moved for better opportunities, and we grew up seeing how much education shaped what was possible for us. We also know that many kids back home have no one to help with math or science once the school day ends.</p>
-          <p>In July 2025 we started Learn To Give to offer free tutoring to 4th and 5th graders in the region we come from. We are aware that opportunities can be hard to find, and we wanted to help make them easier to reach. Since then we've taught more than 50 students in Telugu and English, with volunteer tutors who give their time for free. Every donation we receive goes to Sadhana Society, so the learning our students get also helps children who need specialized care.</p>
+          <p data-i18n="about.story">Learn To Give started in July 2025, when the three of us decided to offer free tutoring to 4th and 5th graders in Hyderabad and Vijayawada. Two of us are daughters of immigrants with roots in those cities. Their families moved for better opportunities, and they grew up seeing how much education shaped what was possible. We also know that many kids there have no one to help with math or science once the school day ends, and that opportunities can be hard to find. We wanted to make them easier to reach. Since then we've taught more than 50 students in Telugu and English, with volunteer tutors who give their time for free. Every donation we receive goes to Sadhana Society, so the learning our students get also helps children who need specialized care.</p>
         </div>
       </div>
     </section>

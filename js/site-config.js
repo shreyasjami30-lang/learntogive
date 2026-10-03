@@ -9,27 +9,43 @@
                              sitemap.xml and robots.txt (see README).
    - forms.endpoint ........ "https://formspree.io/f/YOUR_FORM_ID" is a
                              placeholder. Also find-and-replace it in the
-                             form action="" attributes of join.html,
-                             volunteer.html, contact.html and donate.html.
-   - founders[2].bio ....... Shreyas's bio has not been written yet.
-   - founders[*].photo ..... All founder photos are SVG placeholders
-                             showing initials.
-   - classes[*].topics ..... SAMPLE topics, to be confirmed.
-   - classes[*].versions ... Telugu and English versions currently share
-                             one time slot. Confirm, or edit each version's
-                             day / timeIST separately.
+                             form action="" attributes of volunteer.html,
+                             contact.html, donate.html and fundraise.html.
+   - signupFormUrl ......... ON HOLD until the Google Form link is ready.
+                             "[GOOGLE FORM URL]" is a placeholder. Until it
+                             starts with https://, every "Sign Up" button
+                             goes to contact.html instead.
+   - feedbackFormUrl ....... ON HOLD until the Google Form link is ready.
+                             "[FEEDBACK FORM URL]" is a placeholder. The
+                             "Share your experience" button on the Impact
+                             page stays hidden until it starts with https://.
+   - classes[*].versions ... CONFIRMED by the founders (schedule, school
+                             year, topics and FAQ answers). Tell the team
+                             if anything changes. Each version's day and
+                             timeIST can be edited on its own.
    - classes "python" ...... gradeKey assumes Intro to Python is for 4th
                              and 5th graders. Confirm.
+   - founders[2].bio ....... Shreyas's bio is new. Confirm the wording.
+   - founders[*].photo ..... All founder photos are SVG placeholders
+                             showing initials.
+   - Founders' story ....... about.story in js/translations.js is new.
+                             Confirm the wording.
+   - fundraiseHowItWorks ... Confirm this matches how you handle money
+                             raised by fundraisers.
+   - curriculumSamples ..... empty = the Classes page section is hidden.
+                             Add real packet pages with student info
+                             removed (see images/packets/README.md).
+   - images.gallery ........ empty = the gallery is hidden.
    - donations.totalReceived  null = hidden. Set a number (in rupees) only
                              if you want to show it.
    - socialLinks ........... empty = hidden.
    - testimonials .......... empty, and flags.showTestimonials is false.
                              Only add real quotes, first names only.
-   - images ................ every image is a placeholder (hero, founders,
-                             class icons, favicon, og-image).
-   - Founders' story (about.html) first sentence needs founder
-     confirmation. All Telugu text in js/translations.js is
-     MACHINE-TRANSLATED and needs review by a native speaker.
+   - images ................ hero, founders and class icons are
+                             placeholders. The logo is direction A (see
+                             images.logoMark).
+   - All Telugu text in js/translations.js is MACHINE-TRANSLATED and needs
+     review by a native speaker.
    ===================================================================== */
 
 (function () {
@@ -37,9 +53,17 @@
 
   /* All image paths live here. Founders and classes reference these. */
   var images = {
+    /* The logo mark (icon only). The wordmark next to it is live HTML text.
+       To switch logos, change this ONE line to one of:
+         'images/logo-mark.svg'          A. book whose pages curve into a heart (current)
+         'images/logo-mark-pencil.svg'   B. pencil whose eraser end is a heart
+         'images/logo-mark-sunrise.svg'  C. sun rising over an open book
+       Then rebuild the favicon and share images (README "Swap the logo"). */
+    logoMark: 'images/logo-mark.svg',
     hero: 'images/hero.svg',
     favicon: 'images/favicon.svg',
     ogImage: 'images/og-image.png',
+    appleTouchIcon: 'images/apple-touch-icon.png',
     founderRishita: 'images/founder-rishita.svg',
     founderSamatha: 'images/founder-samatha.svg',
     founderShreyas: 'images/founder-shreyas.svg',
@@ -50,7 +74,13 @@
       'science-4': 'images/class-science.svg',
       'science-5': 'images/class-science.svg',
       'python': 'images/class-python.svg'
-    }
+    },
+    /* Photos for the Classes page gallery. The gallery is left out of the page
+       while this list is empty. Never use photos of children.
+       Shape: { src: 'images/gallery/tutors-planning.jpg', alt: 'Describe the photo',
+                caption: 'Short caption', width: 1200, height: 800 }
+       width and height are the image's real pixel size (prevents layout jumps). */
+    gallery: []
   };
 
   window.SITE_CONFIG = {
@@ -92,6 +122,8 @@
     },
 
     /* Adding an object here adds a founder card on the About page.
+       Duplicate a card by adding an entry to the founders list (copy one
+       object below and change its values).
        `bio` stays in English in both languages until a real translation exists. */
     founders: [
       {
@@ -115,28 +147,45 @@
         role: 'Cofounder and Math Lead',
         grade: 12,
         school: 'South Forsyth High School',
-        bio: "[Shreyas's bio goes here]", /* REPLACE BEFORE LAUNCH */
+        bio: 'Shreyas Jami is a high school student with a strong interest in finance and investing. He plans to study business in college and pursue a career in investments and portfolio management. As Math Lead, he helps run the math classes. He also keeps the records for donations to Sadhana.',
         photo: images.founderShreyas
       }
     ],
 
-    /* IST is the anchor time zone. Telugu and English versions default to the
-       same slot but can be edited independently.
-       usEasternNote: optional, internal reference only. It is never shown on
-       family-facing pages. US clocks change seasonally, so it shifts. */
+    /* Classes are year-long and follow the Indian school year. Confirmed. */
+    schoolYear: { start: 'June', end: 'April', status: 'confirmed' },
+
+    /* Every class has a Telugu and an English version, each with its own time.
+       Schedule confirmed by the founders. All times are IST.
+         Slot A: Saturdays 6:00 PM to 7:00 PM
+         Slot B: Saturdays 8:00 PM to 9:00 PM
+       Rule: the English version of one subject meets at the same time as the
+       Telugu version of the other subject, then they trade. A student who
+       takes math and science in the same language never has a clash.
+       Check it by hand after any edit.
+
+       Fields:
+         focus ....... optional focus area shown on the card (null = none).
+         signupUrl ... optional per-class Google Form; falls back to
+                       signupFormUrl below. Only used when it starts with https://.
+         usEasternNote optional, internal reference only. Never shown on
+                       family-facing pages. US clocks change seasonally. */
+    scheduleStatus: 'confirmed',
     classes: [
       {
         id: 'math-4',
         nameKey: 'class.math4.name',
         gradeKey: 'grade.4',
         subject: 'math',
-        topics: ['Place value', 'Multiplication and division', 'Fractions', 'Word problems'], /* SAMPLE */
+        focus: null,
+        topics: ['Place value', 'Multiplication and division', 'Fractions', 'Word problems'],
         durationMinutes: 60,
         signupOpen: true,
+        signupUrl: null,
         usEasternNote: null,
         versions: [
-          { language: 'Telugu', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },
-          { language: 'English', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' }
+          { language: 'Telugu', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },  /* Slot A */
+          { language: 'English', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }  /* Slot B */
         ]
       },
       {
@@ -144,13 +193,15 @@
         nameKey: 'class.math5.name',
         gradeKey: 'grade.5',
         subject: 'math',
-        topics: ['Decimals', 'Fraction operations', 'Order of operations', 'Volume'], /* SAMPLE */
+        focus: null,
+        topics: ['Decimals', 'Fraction operations', 'Order of operations', 'Volume'],
         durationMinutes: 60,
         signupOpen: true,
+        signupUrl: null,
         usEasternNote: null,
         versions: [
-          { language: 'Telugu', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },
-          { language: 'English', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' }
+          { language: 'Telugu', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },  /* Slot A */
+          { language: 'English', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }  /* Slot B */
         ]
       },
       {
@@ -158,13 +209,16 @@
         nameKey: 'class.science4.name',
         gradeKey: 'grade.4',
         subject: 'science',
-        topics: ['Plants and animals', 'States of matter', 'Simple machines', 'Weather'], /* SAMPLE */
+        focus: 'Environmental Science',
+        topicsStatus: 'confirmed',
+        topics: ['Natural resources', 'Water and the water cycle', 'Air and weather', 'Soil and land', 'Pollution and waste', 'Recycling and conservation', 'Energy sources'],
         durationMinutes: 60,
         signupOpen: true,
+        signupUrl: null,
         usEasternNote: null,
         versions: [
-          { language: 'Telugu', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' },
-          { language: 'English', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }
+          { language: 'English', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },  /* Slot A */
+          { language: 'Telugu', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }   /* Slot B */
         ]
       },
       {
@@ -172,13 +226,16 @@
         nameKey: 'class.science5.name',
         gradeKey: 'grade.5',
         subject: 'science',
-        topics: ['Ecosystems', 'Forces and motion', 'The solar system', 'The water cycle'], /* SAMPLE */
+        focus: 'Life Science',
+        topicsStatus: 'confirmed',
+        topics: ['Plant and animal structures', 'Life cycles', 'Food chains and food webs', 'Habitats and adaptations', 'Human body systems', 'Health and nutrition'],
         durationMinutes: 60,
         signupOpen: true,
+        signupUrl: null,
         usEasternNote: null,
         versions: [
-          { language: 'Telugu', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' },
-          { language: 'English', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }
+          { language: 'English', day: 'Saturday', timeIST: '6:00 PM to 7:00 PM' },  /* Slot A */
+          { language: 'Telugu', day: 'Saturday', timeIST: '8:00 PM to 9:00 PM' }   /* Slot B */
         ]
       },
       {
@@ -186,16 +243,57 @@
         nameKey: 'class.python.name',
         gradeKey: 'grade.4and5', /* ASSUMPTION: confirm who Intro to Python is for */
         subject: 'python',
-        topics: ['Variables', 'Loops', 'If/else', 'Building small programs and games'], /* SAMPLE */
+        focus: null,
+        topics: ['Variables', 'Loops', 'If/else', 'Building small programs and games'],
         durationMinutes: 60,
         signupOpen: true,
+        signupUrl: null,
         usEasternNote: null,
         versions: [
-          { language: 'Telugu', day: 'Sunday', timeIST: '6:00 PM to 7:00 PM' },
-          { language: 'English', day: 'Sunday', timeIST: '6:00 PM to 7:00 PM' }
+          { language: 'English', day: 'Sunday', timeIST: '6:00 PM to 7:00 PM' },
+          { language: 'Telugu', day: 'Sunday', timeIST: '8:00 PM to 9:00 PM' }
         ]
       }
     ],
+
+    /* PLACEHOLDER. The Google Form parents use to sign up. A value counts as
+       real only when it starts with https://. Until then every "Sign Up"
+       button goes to contact.html, so no link is broken. */
+    signupFormUrl: '[GOOGLE FORM URL]',
+
+    /* PLACEHOLDER. Google Form for parents, students and tutors to share
+       their experience (first name only, with a permission-to-publish
+       checkbox). The Impact page button is hidden until it starts with https://. */
+    feedbackFormUrl: '[FEEDBACK FORM URL]',
+
+    /* All communication with students, parents and tutors happens on our
+       Discord server. Families get access only after their sign-up is
+       processed, so there is never a public invite link on the site.
+       enabled: false hides every Discord mention. */
+    discord: { enabled: true },
+
+    /* "A look inside our curriculum packets" on the Classes page. The whole
+       section stays out of the page while this list is empty.
+       Only real pages with every bit of student information removed.
+       Shape: { classId: 'math-4', title: 'Fractions practice page',
+                description: 'One sentence.', previewImage: 'images/packets/math-4-fractions.png',
+                fileUrl: 'images/packets/math-4-fractions.pdf' } */
+    curriculumSamples: [],
+
+    /* Fundraise page. Ideas for people in the US raising money for Sadhana. */
+    fundraiseIdeas: [
+      { title: 'School clubs and student groups', examples: 'Bake sales, spirit days' },
+      { title: 'Cultural and community associations', examples: 'Events, food stalls' },
+      { title: 'Temples and community centers', examples: 'A collection at a festival or gathering' },
+      { title: 'Local restaurants and shops', examples: "A share-of-sales night, with the owner's permission" },
+      { title: 'Garage, book, or plant sales', examples: null },
+      { title: 'Walkathons, sports tournaments, or talent shows', examples: null }
+    ],
+    /* CONFIRM: how fundraiser money is handled. Shown on fundraise.html. */
+    fundraiseHowItWorks: {
+      text: 'Tell us your idea using the form below. A founder will reply with next steps. Money raised is handled the same way as donations: a founder records it and we pass the full amount to Sadhana.',
+      status: 'confirm'
+    },
 
     flags: {
       showTestimonials: false,
@@ -204,8 +302,11 @@
     },
 
     /* Rendered on the Impact page only when flags.showTestimonials is true.
-       Real quotes only, first names only, never photos of children.
-       Shape: { quote: '...', name: 'First name', role: 'Parent' } */
+       Real quotes only, collected with permission to publish (feedbackFormUrl).
+       First names only (anything after the first word is dropped), never
+       photos of children.
+       Shape: { quote: '...', name: 'First name', role: 'Parent' }
+       role is one of 'Parent', 'Student', 'Tutor'. */
     testimonials: [],
 
     forms: {

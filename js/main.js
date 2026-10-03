@@ -3,7 +3,8 @@
    ---------------------------------------------------------------------
    - Language toggle (English / Telugu) using data-i18n attributes
    - Fills values from js/site-config.js (data-config, data-mailto, ...)
-   - Renders founders, classes, stats, social links and testimonials
+   - Renders founders, classes, the weekly schedule, stats, social links,
+     gallery, curriculum samples, testimonials and the feedback button
    - Mobile menu, class filters, FAQ accordion, donate dialog
    - Form validation and Formspree submission
    Classic script on purpose: no modules, no fetch() of local files, so
@@ -64,6 +65,33 @@
     return true;
   }
 
+  /* A link from the config counts as real only when it starts with https://.
+     Placeholders such as "[GOOGLE FORM URL]" never become live links. */
+  function isRealUrl(value) {
+    return typeof value === 'string' && /^https:\/\/\S+$/.test(value.trim());
+  }
+
+  /* Where a class's "Sign Up" button goes: the class's own form, then the
+     shared Google Form, then contact.html while both are still placeholders. */
+  function signupLink(cls) {
+    var url = cls && isRealUrl(cls.signupUrl) ? cls.signupUrl : C.signupFormUrl;
+    if (isRealUrl(url)) return { href: url.trim(), external: true };
+    return { href: 'contact.html?reason=join', external: false };
+  }
+
+  /* Attributes and hidden note for a link that opens in a new tab. */
+  function externalAttrs(external) {
+    return external ? ' target="_blank" rel="noopener"' : '';
+  }
+  function newTabNote(external) {
+    return external ? '<span class="visually-hidden"> ' + escapeHTML(t('common.newTab')) + '</span>' : '';
+  }
+
+  /* First word only, so testimonials never show a full name. */
+  function firstName(name) {
+    return String(name || '').trim().split(/\s+/)[0] || '';
+  }
+
   /* Text values that live in site-config.js but are used like translations. */
   function configStrings() {
     return {
@@ -78,6 +106,10 @@
   function lookup(key) {
     var te = T.te || {};
     var en = T.en || {};
+    // With Discord turned off, a "<key>.noDiscord" variant replaces the text.
+    if (!(C.discord && C.discord.enabled) && Object.prototype.hasOwnProperty.call(en, key + '.noDiscord')) {
+      key = key + '.noDiscord';
+    }
     if (state.lang === 'te' && Object.prototype.hasOwnProperty.call(te, key)) {
       return { text: te[key], isFallback: false };
     }
@@ -148,7 +180,9 @@
       classTypes: s.classTypes,
       startedMonthYear: monthYear(s.startedMonthYear),
       asOf: monthYear(d.asOf),
-      lastUpdated: monthYear(d.lastUpdated)
+      lastUpdated: monthYear(d.lastUpdated),
+      yearStart: tr('month', (C.schoolYear && C.schoolYear.start) || ''),
+      yearEnd: tr('month', (C.schoolYear && C.schoolYear.end) || '')
     };
   }
 
@@ -167,6 +201,9 @@
     var value = getPath(C, path);
     return value == null ? '' : String(value);
   }
+
+  /* Config text that has a "config:<path>" Telugu entry in translations.js. */
+  var TRANSLATABLE_CONFIG = ['tagline', 'mission', 'sadhana.description', 'fundraiseHowItWorks.text'];
 
   /* ------------------------------------------------------------------
      Applying language and config values to the page
@@ -207,7 +244,7 @@
       var path = el.getAttribute('data-config');
       var text = configValue(path);
       el.textContent = text;
-      var translatable = path === 'tagline' || path === 'mission' || path === 'sadhana.description';
+      var translatable = TRANSLATABLE_CONFIG.indexOf(path) !== -1;
       if (state.lang === 'te' && translatable && !(T.te && T.te['config:' + path])) {
         el.setAttribute('lang', 'en');
       }
@@ -238,6 +275,9 @@
   function applyVisibility(root) {
     $all('[data-show-if]', root).forEach(function (el) {
       el.hidden = !hasValue(getPath(C, el.getAttribute('data-show-if')));
+    });
+    $all('[data-hide-if]', root).forEach(function (el) {
+      el.hidden = hasValue(getPath(C, el.getAttribute('data-hide-if')));
     });
     $all('[data-show-lang]', root).forEach(function (el) {
       var show = el.getAttribute('data-show-lang') === state.lang;
@@ -276,8 +316,9 @@
         { value: s.studentsTaught, key: 'stat.students' },
         { value: s.volunteerTutors, key: 'stat.tutors' },
         { value: s.classTypes, key: 'stat.classes' },
-        { value: citiesText(), key: 'stat.cities', small: true },
-        { value: monthYear(s.startedMonthYear), key: 'stat.since', small: true }
+        { value: monthYear(s.startedMonthYear), key: 'stat.since', small: true },
+        // Last, so on two-column phones it takes the full row (long city lists stay whole words).
+        { value: citiesText(), key: 'stat.cities', small: true }
       ];
       el.innerHTML = items.filter(function (item) { return hasValue(item.value); }).map(function (item) {
         return '<li class="stat' + (item.small ? ' stat--text' : '') + '">' +
@@ -292,9 +333,13 @@
       el.innerHTML = founders.map(function (f) {
         var roleFallback = trIsFallback('role', f.role) ? ' lang="en"' : '';
         var grade = state.lang === 'te' ? f.grade : ordinal(f.grade);
-        return '<li class="founder-card card">' +
-          '<img class="founder-photo" src="' + escapeHTML(f.photo) + '" alt="' +
-            escapeHTML(t('about.founderPhotoAlt', { name: f.name })) + '" width="160" height="160" loading="lazy" decoding="async">' +
+        // No photo: an initials circle instead of a broken image (break-ui).
+        var photo = f.photo
+          ? '<img class="founder-photo" src="' + escapeHTML(f.photo) + '" alt="' +
+              escapeHTML(t('about.founderPhotoAlt', { name: f.name })) + '" width="160" height="160" loading="lazy" decoding="async"' +
+              ' data-initials="' + escapeHTML(initials(f.name)) + '">'
+          : initialsAvatar(f.name);
+        return '<li class="founder-card card">' + photo +
           '<h3 class="founder-name" lang="en">' + escapeHTML(f.name) + '</h3>' +
           '<p class="founder-role"' + roleFallback + '>' + escapeHTML(tr('role', f.role)) + '</p>' +
           '<p class="founder-school">' + escapeHTML(t('about.founderGrade', { gradeOrdinal: grade, grade: f.grade, school: f.school })) + '</p>' +
@@ -307,7 +352,7 @@
       var classes = C.classes || [];
       var icons = (C.images && C.images.classIcons) || {};
       el.innerHTML = classes.map(function (cls) {
-        var name = t(cls.nameKey);
+        var name = className(cls);
         var headingId = 'class-' + cls.id + '-title';
         var topics = (cls.topics || []).map(function (topic) {
           var lang = trIsFallback('topic', topic) ? ' lang="en"' : '';
@@ -316,14 +361,16 @@
         var versions = (cls.versions || []).map(function (v) {
           return '<li class="version" data-language="' + escapeHTML(v.language) + '">' +
             '<span class="version-lang">' + escapeHTML(t('classes.versionLabel', { language: tr('lang', v.language) })) + '</span>' +
-            '<span class="version-day">' + escapeHTML(tr('day', v.day)) + '</span>' +
-            '<span class="version-time"><span lang="en">' + escapeHTML(v.timeIST) + '</span> ' +
+            '<span class="version-day">' + dayHTML(v.day) + '</span>' +
+            '<span class="version-time"><span lang="en">' + escapeHTML(timeText(v.timeIST)) + '</span> ' +
               '<abbr class="ist-badge" title="' + escapeHTML(t('common.istFull')) + '">' + escapeHTML(t('common.ist')) + '</abbr></span>' +
             '</li>';
         }).join('');
+        var link = signupLink(cls);
         var action = cls.signupOpen
-          ? '<a class="btn btn-primary btn-block" href="join.html?class=' + encodeURIComponent(cls.id) + '" aria-label="' +
-              escapeHTML(t('classes.signUpAria', { name: name })) + '">' + escapeHTML(t('classes.signUp')) + '</a>'
+          ? '<a class="btn btn-primary btn-block" href="' + escapeHTML(link.href) + '"' + externalAttrs(link.external) +
+              ' aria-label="' + escapeHTML(t('classes.signUpAria', { name: name }) + (link.external ? ' ' + t('common.newTab') : '')) + '">' +
+              escapeHTML(t('classes.signUp')) + '</a>'
           : '<p class="class-closed">' + escapeHTML(t('classes.closed')) + '</p>';
         var icon = icons[cls.id]
           ? '<img class="class-icon" src="' + escapeHTML(icons[cls.id]) + '" alt="" width="56" height="56" loading="lazy" decoding="async">'
@@ -335,6 +382,7 @@
               '<p class="class-for">' + escapeHTML(t(cls.gradeKey)) + '</p></div>' +
               '<span class="badge badge-free">' + escapeHTML(t('classes.free')) + '</span>' +
             '</div>' +
+            focusHTML(cls) +
             '<p class="class-duration">' + escapeHTML(durationText(cls.durationMinutes)) + '</p>' +
             '<h4 class="class-subhead">' + escapeHTML(t('classes.topics')) + '</h4>' +
             '<ul class="topic-list">' + topics + '</ul>' +
@@ -347,22 +395,75 @@
       applyClassFilter();
     },
 
-    'class-list': function (el) {
+    /* Short class cards for the Join page. */
+    'class-summary': function (el) {
       el.innerHTML = (C.classes || []).map(function (cls) {
-        return '<li>' + escapeHTML(t(cls.nameKey)) + '</li>';
+        var icons = (C.images && C.images.classIcons) || {};
+        var icon = icons[cls.id]
+          ? '<img class="class-icon" src="' + escapeHTML(icons[cls.id]) + '" alt="" width="48" height="48" loading="lazy" decoding="async">'
+          : '';
+        return '<li class="card summary-card">' +
+          '<div class="class-card-head">' + icon +
+            '<div><h3 class="class-name">' + escapeHTML(className(cls)) + '</h3>' +
+            '<p class="class-for">' + escapeHTML(t(cls.gradeKey)) + '</p></div>' +
+          '</div>' +
+          focusHTML(cls) +
+          '</li>';
       }).join('');
     },
 
-    'class-options': function (select) {
-      var previous = select.value;
-      var placeholder = '<option value="">' + escapeHTML(t('form.choose')) + '</option>';
-      select.innerHTML = placeholder + (C.classes || []).map(function (cls) {
-        var english = (T.en && T.en[cls.nameKey]) || cls.id;
-        var disabled = cls.signupOpen ? '' : ' disabled';
-        return '<option value="' + escapeHTML(english) + '" data-class-id="' + escapeHTML(cls.id) + '"' + disabled + '>' +
-          escapeHTML(t(cls.nameKey)) + '</option>';
+    /* "Weekly schedule at a glance": one row per class version, sorted by day and time. */
+    schedule: function (el) {
+      var rows = [];
+      (C.classes || []).forEach(function (cls) {
+        (cls.versions || []).forEach(function (v) {
+          rows.push({ cls: cls, v: v, sort: dayIndex(v.day) * 10000 + startMinutes(v.timeIST) });
+        });
+      });
+      rows.sort(function (a, b) { return a.sort - b.sort; });
+      if (!rows.length) {
+        el.innerHTML = '<p class="empty-note">' + escapeHTML(t('schedule.empty')) + '</p>';
+        return;
+      }
+      el.innerHTML = '<table class="schedule-table">' +
+        '<caption>' + escapeHTML(t('schedule.caption')) + '</caption>' +
+        '<thead><tr>' +
+          '<th scope="col">' + escapeHTML(t('schedule.day')) + '</th>' +
+          '<th scope="col">' + escapeHTML(t('schedule.time')) + '</th>' +
+          '<th scope="col">' + escapeHTML(t('schedule.class')) + '</th>' +
+          '<th scope="col">' + escapeHTML(t('schedule.language')) + '</th>' +
+        '</tr></thead><tbody>' +
+        rows.map(function (r) {
+          return '<tr data-language="' + escapeHTML(r.v.language) + '">' +
+            '<td>' + dayHTML(r.v.day) + '</td>' +
+            '<td class="schedule-time"><span lang="en">' + escapeHTML(timeText(r.v.timeIST)) + '</span></td>' +
+            '<th scope="row">' + escapeHTML(className(r.cls)) + '</th>' +
+            '<td><span class="lang-pill" data-language="' + escapeHTML(r.v.language) + '">' + escapeHTML(tr('lang', r.v.language)) + '</span></td>' +
+            '</tr>';
+        }).join('') +
+        '</tbody></table>';
+      applyClassFilter();
+    },
+
+    'class-list': function (el) {
+      el.innerHTML = (C.classes || []).map(function (cls) {
+        return '<li>' + escapeHTML(className(cls)) + '</li>';
       }).join('');
-      if (previous) select.value = previous;
+    },
+
+    /* Every "Sign up" call to action outside the class cards. */
+    'signup-link': function (el) {
+      var link = signupLink(null);
+      el.setAttribute('href', link.href);
+      if (link.external) {
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+      } else {
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+      }
+      var note = el.querySelector('.new-tab-note');
+      if (note) note.hidden = !link.external;
     },
 
     social: function (el) {
@@ -372,6 +473,8 @@
       }).join('');
     },
 
+    /* Left out of the page completely unless flags.showTestimonials is true
+       and there are real entries. First names only, never photos. */
     testimonials: function (el) {
       var list = C.testimonials || [];
       if (!(C.flags && C.flags.showTestimonials) || !list.length) {
@@ -381,11 +484,143 @@
       el.innerHTML = '<section class="section" aria-labelledby="testimonials-title"><div class="container">' +
         '<h2 id="testimonials-title">' + escapeHTML(t('impact.testimonialsTitle')) + '</h2>' +
         '<ul class="testimonial-grid">' + list.map(function (item) {
+          var role = item.role ? ', ' + escapeHTML(tr('role', item.role)) : '';
           return '<li class="card testimonial"><blockquote><p>' + escapeHTML(item.quote) + '</p></blockquote>' +
-            '<p class="testimonial-name">' + escapeHTML(item.name) + (item.role ? ', ' + escapeHTML(item.role) : '') + '</p></li>';
+            '<p class="testimonial-name"><span lang="en">' + escapeHTML(firstName(item.name)) + '</span>' + role + '</p></li>';
         }).join('') + '</ul></div></section>';
+    },
+
+    /* "Share your experience" button. Only rendered when feedbackFormUrl is real. */
+    feedback: function (el) {
+      if (!isRealUrl(C.feedbackFormUrl)) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = '<section class="section section--tint" aria-labelledby="feedback-title"><div class="container">' +
+        '<h2 id="feedback-title">' + escapeHTML(t('impact.feedbackTitle')) + '</h2>' +
+        '<p class="section-intro">' + escapeHTML(t('impact.feedbackBody')) + '</p>' +
+        '<a class="btn btn-primary" href="' + escapeHTML(C.feedbackFormUrl.trim()) + '"' + externalAttrs(true) + '>' +
+          escapeHTML(t('impact.feedbackCta')) + newTabNote(true) + '</a>' +
+        '</div></section>';
+    },
+
+    /* Photo gallery. Left out of the page while images.gallery is empty. */
+    gallery: function (el) {
+      var list = ((C.images && C.images.gallery) || []).filter(function (img) { return img && img.src; });
+      if (!list.length) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = '<section class="section" aria-labelledby="gallery-title"><div class="container">' +
+        '<h2 id="gallery-title">' + escapeHTML(t('classes.galleryTitle')) + '</h2>' +
+        '<ul class="gallery-row">' + list.map(function (img) {
+          return '<li class="gallery-item"><figure>' +
+            '<img src="' + escapeHTML(img.src) + '" alt="' + escapeHTML(img.alt || '') + '" width="' + (Number(img.width) || 800) +
+              '" height="' + (Number(img.height) || 600) + '" loading="lazy" decoding="async">' +
+            (img.caption ? '<figcaption lang="en">' + escapeHTML(img.caption) + '</figcaption>' : '') +
+            '</figure></li>';
+        }).join('') + '</ul></div></section>';
+    },
+
+    /* "A look inside our curriculum packets". Left out while the list is empty. */
+    samples: function (el) {
+      var list = (C.curriculumSamples || []).filter(function (s) { return s && s.title; });
+      if (!list.length) {
+        el.innerHTML = '';
+        return;
+      }
+      var names = {};
+      (C.classes || []).forEach(function (cls) { names[cls.id] = className(cls); });
+      el.innerHTML = '<section class="section" aria-labelledby="samples-title"><div class="container">' +
+        '<h2 id="samples-title">' + escapeHTML(t('classes.samplesTitle')) + '</h2>' +
+        '<p class="section-intro">' + escapeHTML(t('classes.samplesIntro')) + '</p>' +
+        '<ul class="sample-grid">' + list.map(function (s) {
+          var preview = s.previewImage
+            ? '<img class="sample-preview" src="' + escapeHTML(s.previewImage) + '" alt="' +
+                escapeHTML(t('classes.samplePreviewAlt', { title: s.title })) + '" width="600" height="776" loading="lazy" decoding="async">'
+            : '';
+          var link = s.fileUrl
+            ? '<a class="link-arrow" href="' + escapeHTML(s.fileUrl) + '" target="_blank" rel="noopener">' +
+                escapeHTML(t('classes.sampleLink')) + '<span class="visually-hidden">: ' + escapeHTML(s.title) + ' ' + escapeHTML(t('common.newTab')) + '</span></a>'
+            : '';
+          return '<li class="card sample-card">' + preview +
+            (names[s.classId] ? '<p class="sample-class">' + escapeHTML(names[s.classId]) + '</p>' : '') +
+            '<h3 class="sample-title" lang="en">' + escapeHTML(s.title) + '</h3>' +
+            (s.description ? '<p lang="en">' + escapeHTML(s.description) + '</p>' : '') +
+            link + '</li>';
+        }).join('') + '</ul></div></section>';
+    },
+
+    /* Fundraise page ideas, from SITE_CONFIG.fundraiseIdeas. */
+    'fundraise-ideas': function (el) {
+      el.innerHTML = (C.fundraiseIdeas || []).map(function (idea) {
+        var titleLang = trIsFallback('idea', idea.title) ? ' lang="en"' : '';
+        var exLang = idea.examples && trIsFallback('idea', idea.examples) ? ' lang="en"' : '';
+        return '<li class="card idea-card">' +
+          '<h3' + titleLang + '>' + escapeHTML(tr('idea', idea.title)) + '</h3>' +
+          (idea.examples ? '<p' + exLang + '>' + escapeHTML(tr('idea', idea.examples)) + '</p>' : '') +
+          '</li>';
+      }).join('');
     }
   };
+
+  function focusHTML(cls) {
+    if (!cls.focus) return '';
+    var lang = trIsFallback('focus', cls.focus) ? ' lang="en"' : '';
+    return '<p class="class-focus"><span class="class-focus-label">' + escapeHTML(t('classes.focus')) + '</span> ' +
+      '<span' + lang + '>' + escapeHTML(tr('focus', cls.focus)) + '</span></p>';
+  }
+
+  var DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  function dayIndex(day) {
+    var i = DAYS.indexOf(day);
+    return i === -1 ? DAYS.length : i;
+  }
+
+  /* "6:00 PM to 7:00 PM" -> 1080 (minutes after midnight). */
+  function startMinutes(timeIST) {
+    var m = /(\d{1,2}):(\d{2})\s*([AP]M)/i.exec(String(timeIST || ''));
+    if (!m) return 0;
+    var h = Number(m[1]) % 12;
+    if (m[3].toUpperCase() === 'PM') h += 12;
+    return h * 60 + Number(m[2]);
+  }
+
+  /* Initials from the first and last word, counted in graphemes so accented
+     letters and emoji stay whole. "Jo" -> "J", "Shreyas Jami" -> "SJ". */
+  function initials(name) {
+    var words = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return '';
+    var pick = words.length > 1 ? [words[0], words[words.length - 1]] : [words[0]];
+    return pick.map(function (w) { return firstGrapheme(w).toLocaleUpperCase(); }).join('');
+  }
+  function firstGrapheme(word) {
+    if (window.Intl && Intl.Segmenter) {
+      var it = new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(word)[Symbol.iterator]().next();
+      return it.done ? '' : it.value.segment;
+    }
+    return Array.from(word)[0] || '';
+  }
+  function initialsAvatar(name) {
+    return '<span class="founder-photo founder-initials" role="img" aria-label="' +
+      escapeHTML(t('about.founderPhotoAlt', { name: name })) + '"><span aria-hidden="true" lang="en">' + escapeHTML(initials(name)) + '</span></span>';
+  }
+
+  /* Keeps "7:00 PM" on one line: a no-break space before AM/PM. */
+  function timeText(timeIST) {
+    return String(timeIST || '').replace(/\s+(AM|PM)\b/gi, '\u00a0$1');
+  }
+
+  /* A class's display name. Falls back to its id rather than a raw translation key. */
+  function className(cls) {
+    return lookup(cls.nameKey) ? t(cls.nameKey) : (cls.name || cls.id);
+  }
+
+  /* A weekday from the config, marked lang="en" when it has no Telugu entry. */
+  function dayHTML(day) {
+    var lang = trIsFallback('day', day) ? ' lang="en"' : '';
+    return '<span' + lang + '>' + escapeHTML(tr('day', day)) + '</span>';
+  }
 
   function durationText(minutes) {
     if (!minutes) return '';
@@ -467,7 +702,7 @@
      Class filters (All / Telugu / English)
      ------------------------------------------------------------------ */
   function applyClassFilter() {
-    $all('.version[data-language]').forEach(function (row) {
+    $all('.version[data-language], .schedule-table tr[data-language]').forEach(function (row) {
       var lang = row.getAttribute('data-language');
       row.hidden = !(state.classFilter === 'all' || state.classFilter === lang);
     });
@@ -535,7 +770,7 @@
   }
 
   /* ------------------------------------------------------------------
-     URL parameter preselects (?class= on Join, ?reason= on Contact)
+     URL parameter preselect (?reason= on Contact)
      ------------------------------------------------------------------ */
   function getParam(name) {
     var match = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.search);
@@ -543,13 +778,6 @@
   }
 
   function preselectFromUrl() {
-    var classId = getParam('class');
-    var classSelect = document.querySelector('[data-render="class-options"]');
-    if (classId && classSelect) {
-      $all('option', classSelect).forEach(function (opt) {
-        if (opt.getAttribute('data-class-id') === classId && !opt.disabled) classSelect.value = opt.value;
-      });
-    }
     var reason = getParam('reason');
     var reasonSelect = document.querySelector('select[data-preselect="reason"]');
     if (reason && reasonSelect) {
@@ -745,8 +973,23 @@
   /* ------------------------------------------------------------------
      Start
      ------------------------------------------------------------------ */
+  /* A founder photo that fails to load is swapped for its initials circle. */
+  function initImageFallbacks() {
+    document.addEventListener('error', function (event) {
+      var img = event.target;
+      if (!img || img.tagName !== 'IMG' || !img.classList.contains('founder-photo')) return;
+      var span = document.createElement('span');
+      span.className = 'founder-photo founder-initials';
+      span.setAttribute('role', 'img');
+      span.setAttribute('aria-label', img.getAttribute('alt') || '');
+      span.innerHTML = '<span aria-hidden="true" lang="en">' + escapeHTML(img.getAttribute('data-initials') || '') + '</span>';
+      img.replaceWith(span);
+    }, true);
+  }
+
   function init() {
     document.documentElement.classList.add('js');
+    initImageFallbacks();
     var saved = storageGet(STORAGE_KEY);
     updateHeadUrls();
     initLanguageToggle();
@@ -760,7 +1003,7 @@
   }
 
   // Exposed for debugging and for the README's examples.
-  window.LTG = { setLanguage: function (lang) { setLanguage(lang, true); }, t: t };
+  window.LTG = { setLanguage: function (lang) { setLanguage(lang, true); }, t: t, isRealUrl: isRealUrl, rerender: function () { setLanguage(state.lang, false); } };
 
   init();
 })();

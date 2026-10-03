@@ -23,6 +23,9 @@
     <loc>https://www.example.com/donate.html</loc>
   </url>
   <url>
+    <loc>https://www.example.com/fundraise.html</loc>
+  </url>
+  <url>
     <loc>https://www.example.com/contact.html</loc>
   </url>
 </urlset>

@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Learn To Give | Free online tutoring in Telugu and English</title>
   <meta name="description" content="Learn To Give offers free online tutoring over Zoom for 4th and 5th graders in Hyderabad and Vijayawada, in Telugu and English, while raising donations for Sadhana Society.">
   <!-- Canonical and Open Graph URLs use the placeholder domain. See README "Connect a custom domain". -->
   <link rel="canonical" href="https://www.example.com/">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <!-- The site has one light theme, so one theme-color (the header's cream) is correct for both OS schemes. -->
   <meta name="theme-color" content="#FFF8EE">
+  <meta name="color-scheme" content="light">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Learn To Give">
   <meta property="og:title" content="Learn To Give | Free online tutoring in Telugu and English">
   <meta property="og:description" content="Learn To Give offers free online tutoring over Zoom for 4th and 5th graders in Hyderabad and Vijayawada, in Telugu and English, while raising donations for Sadhana Society.">
   <meta property="og:url" content="https://www.example.com/">
   <meta property="og:image" content="https://www.example.com/images/og-image.png">
-  <meta property="og:image:alt" content="Learn To Give: Learning that gives back.">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
+  <meta name="twitter:image:alt" content="The Learn To Give logo, an open book whose pages curve into a heart, with the words Learn To Give: Learning that gives back.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Learn To Give | Free online tutoring in Telugu and English">
   <meta name="twitter:description" content="Learn To Give offers free online tutoring over Zoom for 4th and 5th graders in Hyderabad and Vijayawada, in Telugu and English, while raising donations for Sadhana Society.">
@@ -40,6 +47,7 @@
           <li><a href="volunteer.html">Volunteer</a></li>
           <li><a href="impact.html">Impact</a></li>
           <li><a href="donate.html">Donate</a></li>
+          <li><a href="fundraise.html">Fundraise</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
         <p class="noscript-note">Some parts of this site, like class times and figures, need JavaScript. You can always email us at <a href="mailto:info.learntogive@gmail.com">info.learntogive@gmail.com</a>.</p>
@@ -50,7 +58,7 @@
   <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-grid">
-        <div class="reveal">
+        <div>
           <p class="hero-tagline" data-config="tagline">Learning that gives back.</p>
           <h1 id="hero-title" lang="en" data-config="orgName">Learn To Give</h1>
           <p class="lead" data-config="mission">We offer free online tutoring for children in Hyderabad and Vijayawada, while raising donations for children who need specialized care.</p>
@@ -116,7 +124,10 @@
             <h2 id="banner-title" data-i18n="home.bannerTitle">Want to give?</h2>
             <p data-i18n="home.bannerBody">Our classes are always free. If you would like to help, donations support children at Sadhana.</p>
           </div>
-          <a class="btn btn-secondary" href="donate.html" data-i18n="home.bannerCta">Learn about donating</a>
+          <div class="banner-actions">
+            <a class="btn btn-secondary" href="donate.html" data-i18n="home.bannerCta">Learn about donating</a>
+            <a class="banner-link" href="fundraise.html" data-i18n="home.bannerFundraise">Fundraise in your community</a>
+          </div>
         </div>
       </div>
     </section>

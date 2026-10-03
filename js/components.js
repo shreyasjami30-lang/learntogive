@@ -22,14 +22,23 @@
     { page: 'contact', href: 'contact.html', key: 'nav.contact', label: 'Contact' }
   ];
 
-  /* Footer links: every page except 404. */
+  /* Footer links: every page except 404. Join and Fundraise are not in the
+     main nav, so the footer is where they are always reachable. */
   var FOOTER_LINKS = NAV.slice(0, 3).concat(
     [{ page: 'join', href: 'join.html', key: 'nav.join', label: 'Join a Class' }],
-    NAV.slice(3)
+    NAV.slice(3, 6),
+    [{ page: 'fundraise', href: 'fundraise.html', key: 'nav.fundraise', label: 'Fundraise' }],
+    NAV.slice(6)
   );
 
   /* Pages that live under a nav section without being in the nav. */
-  var SECTION_OF = { join: 'classes' };
+  var SECTION_OF = { join: 'classes', fundraise: 'donate' };
+
+  var CONFIG = window.SITE_CONFIG || {};
+  var ORG = CONFIG.orgName || 'Learn To Give';
+  function logoMark() {
+    return (CONFIG.images && CONFIG.images.logoMark) || 'images/logo-mark.svg';
+  }
 
   function navLinks(items, currentPage) {
     var section = SECTION_OF[currentPage];
@@ -48,11 +57,20 @@
     return '' +
       '<div class="header-bar">' +
         '<div class="container header-inner">' +
-          '<a class="wordmark" href="index.html" lang="en" data-config="orgName" data-i18n-attr="aria-label:nav.homeLabel">Learn To Give</a>' +
+          /* The mark is an <img>; the wordmark is live HTML text, because web
+             fonts do not load inside an SVG used as an <img>. */
+          '<a class="wordmark" href="index.html" lang="en" data-i18n-attr="aria-label:nav.homeLabel">' +
+            '<img class="wordmark-mark" src="' + logoMark() + '" alt="' + ORG + ' logo" width="40" height="40">' +
+            '<span data-config="orgName">' + ORG + '</span>' +
+          '</a>' +
           '<div class="header-actions">' +
             '<div class="lang-toggle" role="group" aria-label="Choose language" data-i18n-attr="aria-label:lang.groupLabel">' +
-              '<button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="true">English</button>' +
-              '<button type="button" class="lang-btn" data-lang="te" lang="te" aria-pressed="false">తెలుగు</button>' +
+              /* Full names, with short forms that take over on narrow phones so the
+                 header stays on one row. aria-label keeps the full name for screen readers. */
+              '<button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="true" aria-label="English">' +
+                '<span class="lang-full" aria-hidden="true">English</span><span class="lang-short" aria-hidden="true">EN</span></button>' +
+              '<button type="button" class="lang-btn" data-lang="te" lang="te" aria-pressed="false" aria-label="తెలుగు">' +
+                '<span class="lang-full" aria-hidden="true">తెలుగు</span><span class="lang-short" aria-hidden="true">తె</span></button>' +
             '</div>' +
             '<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">' +
               '<span class="nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>' +
@@ -73,7 +91,11 @@
     return '' +
       '<div class="container footer-inner">' +
         '<div class="footer-brand">' +
-          '<p class="footer-name" lang="en" data-config="orgName">Learn To Give</p>' +
+          '<p class="footer-name" lang="en">' +
+            /* Empty alt: the wordmark text right next to it already names it. */
+            '<span class="footer-mark"><img src="' + logoMark() + '" alt="" width="40" height="40"></span>' +
+            '<span data-config="orgName">' + ORG + '</span>' +
+          '</p>' +
           '<p class="footer-tagline" data-config="tagline">Learning that gives back.</p>' +
           '<p class="footer-email"><span data-i18n="footer.emailLabel">Email us:</span> <a data-mailto lang="en"></a></p>' +
         '</div>' +
