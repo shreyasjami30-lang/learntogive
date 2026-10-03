@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="t">
+  <title id="t">Learn To Give logo: a saffron sun rising over an open book</title>
+  <!-- Direction C, "Sunrise". Icon only. -->
+  <g stroke="#F2A541" stroke-width="4.5" stroke-linecap="round">
+    <path d="M32 19V11M20.4 24.2L15.9 18.9M43.6 24.2L48.1 18.9M14.6 33.3L7.9 31.5M49.4 33.3L56.1 31.5"/>
+  </g>
+  <circle cx="32" cy="39" r="13" fill="#F2A541"/>
+  <path d="M2 47C12 45 23 46 32 51.5C41 46 52 45 62 47V53C52 51 41 52 32 58C23 52 12 51 2 53Z" fill="#5A1F1B"/>
+  <path d="M30.5 41C23 36.5 13 35.5 4 37.5V49C13 47 23 48 30.5 52.5Z" fill="#C8553D"/>
+  <path d="M33.5 41C41 36.5 51 35.5 60 37.5V49C51 47 41 48 33.5 52.5Z" fill="#C8553D"/>
+</svg>
