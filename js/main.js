@@ -316,8 +316,9 @@
         { value: s.studentsTaught, key: 'stat.students' },
         { value: s.volunteerTutors, key: 'stat.tutors' },
         { value: s.classTypes, key: 'stat.classes' },
-        { value: citiesText(), key: 'stat.cities', small: true },
-        { value: monthYear(s.startedMonthYear), key: 'stat.since', small: true }
+        { value: monthYear(s.startedMonthYear), key: 'stat.since', small: true },
+        // Last, so on two-column phones it takes the full row (long city lists stay whole words).
+        { value: citiesText(), key: 'stat.cities', small: true }
       ];
       el.innerHTML = items.filter(function (item) { return hasValue(item.value); }).map(function (item) {
         return '<li class="stat' + (item.small ? ' stat--text' : '') + '">' +
@@ -332,9 +333,13 @@
       el.innerHTML = founders.map(function (f) {
         var roleFallback = trIsFallback('role', f.role) ? ' lang="en"' : '';
         var grade = state.lang === 'te' ? f.grade : ordinal(f.grade);
-        return '<li class="founder-card card">' +
-          '<img class="founder-photo" src="' + escapeHTML(f.photo) + '" alt="' +
-            escapeHTML(t('about.founderPhotoAlt', { name: f.name })) + '" width="160" height="160" loading="lazy" decoding="async">' +
+        // No photo: an initials circle instead of a broken image (break-ui).
+        var photo = f.photo
+          ? '<img class="founder-photo" src="' + escapeHTML(f.photo) + '" alt="' +
+              escapeHTML(t('about.founderPhotoAlt', { name: f.name })) + '" width="160" height="160" loading="lazy" decoding="async"' +
+              ' data-initials="' + escapeHTML(initials(f.name)) + '">'
+          : initialsAvatar(f.name);
+        return '<li class="founder-card card">' + photo +
           '<h3 class="founder-name" lang="en">' + escapeHTML(f.name) + '</h3>' +
           '<p class="founder-role"' + roleFallback + '>' + escapeHTML(tr('role', f.role)) + '</p>' +
           '<p class="founder-school">' + escapeHTML(t('about.founderGrade', { gradeOrdinal: grade, grade: f.grade, school: f.school })) + '</p>' +
@@ -347,7 +352,7 @@
       var classes = C.classes || [];
       var icons = (C.images && C.images.classIcons) || {};
       el.innerHTML = classes.map(function (cls) {
-        var name = t(cls.nameKey);
+        var name = className(cls);
         var headingId = 'class-' + cls.id + '-title';
         var topics = (cls.topics || []).map(function (topic) {
           var lang = trIsFallback('topic', topic) ? ' lang="en"' : '';
@@ -356,8 +361,8 @@
         var versions = (cls.versions || []).map(function (v) {
           return '<li class="version" data-language="' + escapeHTML(v.language) + '">' +
             '<span class="version-lang">' + escapeHTML(t('classes.versionLabel', { language: tr('lang', v.language) })) + '</span>' +
-            '<span class="version-day">' + escapeHTML(tr('day', v.day)) + '</span>' +
-            '<span class="version-time"><span lang="en">' + escapeHTML(v.timeIST) + '</span> ' +
+            '<span class="version-day">' + dayHTML(v.day) + '</span>' +
+            '<span class="version-time"><span lang="en">' + escapeHTML(timeText(v.timeIST)) + '</span> ' +
               '<abbr class="ist-badge" title="' + escapeHTML(t('common.istFull')) + '">' + escapeHTML(t('common.ist')) + '</abbr></span>' +
             '</li>';
         }).join('');
@@ -399,7 +404,7 @@
           : '';
         return '<li class="card summary-card">' +
           '<div class="class-card-head">' + icon +
-            '<div><h3 class="class-name">' + escapeHTML(t(cls.nameKey)) + '</h3>' +
+            '<div><h3 class="class-name">' + escapeHTML(className(cls)) + '</h3>' +
             '<p class="class-for">' + escapeHTML(t(cls.gradeKey)) + '</p></div>' +
           '</div>' +
           focusHTML(cls) +
@@ -416,6 +421,10 @@
         });
       });
       rows.sort(function (a, b) { return a.sort - b.sort; });
+      if (!rows.length) {
+        el.innerHTML = '<p class="empty-note">' + escapeHTML(t('schedule.empty')) + '</p>';
+        return;
+      }
       el.innerHTML = '<table class="schedule-table">' +
         '<caption>' + escapeHTML(t('schedule.caption')) + '</caption>' +
         '<thead><tr>' +
@@ -426,9 +435,9 @@
         '</tr></thead><tbody>' +
         rows.map(function (r) {
           return '<tr data-language="' + escapeHTML(r.v.language) + '">' +
-            '<td>' + escapeHTML(tr('day', r.v.day)) + '</td>' +
-            '<td class="schedule-time"><span lang="en">' + escapeHTML(r.v.timeIST) + '</span></td>' +
-            '<th scope="row">' + escapeHTML(t(r.cls.nameKey)) + '</th>' +
+            '<td>' + dayHTML(r.v.day) + '</td>' +
+            '<td class="schedule-time"><span lang="en">' + escapeHTML(timeText(r.v.timeIST)) + '</span></td>' +
+            '<th scope="row">' + escapeHTML(className(r.cls)) + '</th>' +
             '<td><span class="lang-pill" data-language="' + escapeHTML(r.v.language) + '">' + escapeHTML(tr('lang', r.v.language)) + '</span></td>' +
             '</tr>';
         }).join('') +
@@ -438,7 +447,7 @@
 
     'class-list': function (el) {
       el.innerHTML = (C.classes || []).map(function (cls) {
-        return '<li>' + escapeHTML(t(cls.nameKey)) + '</li>';
+        return '<li>' + escapeHTML(className(cls)) + '</li>';
       }).join('');
     },
 
@@ -521,7 +530,7 @@
         return;
       }
       var names = {};
-      (C.classes || []).forEach(function (cls) { names[cls.id] = t(cls.nameKey); });
+      (C.classes || []).forEach(function (cls) { names[cls.id] = className(cls); });
       el.innerHTML = '<section class="section" aria-labelledby="samples-title"><div class="container">' +
         '<h2 id="samples-title">' + escapeHTML(t('classes.samplesTitle')) + '</h2>' +
         '<p class="section-intro">' + escapeHTML(t('classes.samplesIntro')) + '</p>' +
@@ -575,6 +584,42 @@
     var h = Number(m[1]) % 12;
     if (m[3].toUpperCase() === 'PM') h += 12;
     return h * 60 + Number(m[2]);
+  }
+
+  /* Initials from the first and last word, counted in graphemes so accented
+     letters and emoji stay whole. "Jo" -> "J", "Shreyas Jami" -> "SJ". */
+  function initials(name) {
+    var words = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return '';
+    var pick = words.length > 1 ? [words[0], words[words.length - 1]] : [words[0]];
+    return pick.map(function (w) { return firstGrapheme(w).toLocaleUpperCase(); }).join('');
+  }
+  function firstGrapheme(word) {
+    if (window.Intl && Intl.Segmenter) {
+      var it = new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(word)[Symbol.iterator]().next();
+      return it.done ? '' : it.value.segment;
+    }
+    return Array.from(word)[0] || '';
+  }
+  function initialsAvatar(name) {
+    return '<span class="founder-photo founder-initials" role="img" aria-label="' +
+      escapeHTML(t('about.founderPhotoAlt', { name: name })) + '"><span aria-hidden="true" lang="en">' + escapeHTML(initials(name)) + '</span></span>';
+  }
+
+  /* Keeps "7:00 PM" on one line: a no-break space before AM/PM. */
+  function timeText(timeIST) {
+    return String(timeIST || '').replace(/\s+(AM|PM)\b/gi, '\u00a0$1');
+  }
+
+  /* A class's display name. Falls back to its id rather than a raw translation key. */
+  function className(cls) {
+    return lookup(cls.nameKey) ? t(cls.nameKey) : (cls.name || cls.id);
+  }
+
+  /* A weekday from the config, marked lang="en" when it has no Telugu entry. */
+  function dayHTML(day) {
+    var lang = trIsFallback('day', day) ? ' lang="en"' : '';
+    return '<span' + lang + '>' + escapeHTML(tr('day', day)) + '</span>';
   }
 
   function durationText(minutes) {
@@ -928,8 +973,23 @@
   /* ------------------------------------------------------------------
      Start
      ------------------------------------------------------------------ */
+  /* A founder photo that fails to load is swapped for its initials circle. */
+  function initImageFallbacks() {
+    document.addEventListener('error', function (event) {
+      var img = event.target;
+      if (!img || img.tagName !== 'IMG' || !img.classList.contains('founder-photo')) return;
+      var span = document.createElement('span');
+      span.className = 'founder-photo founder-initials';
+      span.setAttribute('role', 'img');
+      span.setAttribute('aria-label', img.getAttribute('alt') || '');
+      span.innerHTML = '<span aria-hidden="true" lang="en">' + escapeHTML(img.getAttribute('data-initials') || '') + '</span>';
+      img.replaceWith(span);
+    }, true);
+  }
+
   function init() {
     document.documentElement.classList.add('js');
+    initImageFallbacks();
     var saved = storageGet(STORAGE_KEY);
     updateHeadUrls();
     initLanguageToggle();

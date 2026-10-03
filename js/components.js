@@ -65,8 +65,12 @@
           '</a>' +
           '<div class="header-actions">' +
             '<div class="lang-toggle" role="group" aria-label="Choose language" data-i18n-attr="aria-label:lang.groupLabel">' +
-              '<button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="true">English</button>' +
-              '<button type="button" class="lang-btn" data-lang="te" lang="te" aria-pressed="false">తెలుగు</button>' +
+              /* Full names, with short forms that take over on narrow phones so the
+                 header stays on one row. aria-label keeps the full name for screen readers. */
+              '<button type="button" class="lang-btn" data-lang="en" lang="en" aria-pressed="true" aria-label="English">' +
+                '<span class="lang-full" aria-hidden="true">English</span><span class="lang-short" aria-hidden="true">EN</span></button>' +
+              '<button type="button" class="lang-btn" data-lang="te" lang="te" aria-pressed="false" aria-label="తెలుగు">' +
+                '<span class="lang-full" aria-hidden="true">తెలుగు</span><span class="lang-short" aria-hidden="true">తె</span></button>' +
             '</div>' +
             '<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">' +
               '<span class="nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>' +

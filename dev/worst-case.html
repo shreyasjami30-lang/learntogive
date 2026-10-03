@@ -1,0 +1,162 @@
+<!doctype html>
+<!-- DEV ONLY. Not linked from any page and not in sitemap.xml. Delete before launch (see README).
+     break-ui stress test: the real renderers from js/main.js, fed worst-case data.
+     The data is swapped at the boundary (window.SITE_CONFIG / window.TRANSLATIONS) before
+     main.js runs, never by editing markup or CSS. Toggle: ?data=demo | worst | empty
+     Use the page's own English / తెలుగు toggle for the Telugu worst case. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <base href="../">
+  <title>Worst case (dev) | Learn To Give</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+Telugu:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Dev chrome: plain and neutral on purpose (break-ui Phase 3). */
+    .data-toggle { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 2147483647; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: #E5E5E5; box-shadow: 0 4px 16px rgba(0,0,0,0.18); font: 600 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .data-toggle a { padding: 8px 14px; border-radius: 999px; color: #444; text-decoration: none; }
+    .data-toggle a[aria-current="true"] { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+    .dev-label { font: 700 12px/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #777; margin: 0 0 .5rem; }
+    main { padding-bottom: 5rem; }
+  </style>
+</head>
+<body data-page="classes">
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" tabindex="-1">
+    <section class="section section--tint"><div class="container">
+      <p class="dev-label">about.html: founders</p>
+      <ul class="card-grid card-grid--3" data-render="founders"></ul>
+    </div></section>
+
+    <section class="section"><div class="container">
+      <p class="dev-label">classes.html: filter, schedule, cards</p>
+      <div class="filter-bar" role="group" aria-labelledby="filter-label">
+        <p id="filter-label" class="filter-label" data-i18n="classes.filterLabel">Show class times in:</p>
+        <button type="button" class="filter-btn" data-filter="all" aria-pressed="true" data-i18n="classes.filterAll">All</button>
+        <button type="button" class="filter-btn" data-filter="Telugu" aria-pressed="false" data-i18n="lang:Telugu">Telugu</button>
+        <button type="button" class="filter-btn" data-filter="English" aria-pressed="false" data-i18n="lang:English">English</button>
+      </div>
+      <h2 id="schedule-title" data-i18n="schedule.title">Weekly schedule at a glance</h2>
+      <div class="table-scroll" role="region" aria-labelledby="schedule-title" tabindex="0" data-render="schedule"></div>
+      <h2 class="class-list-title" data-i18n="classes.listTitle">Class details</h2>
+      <ul class="class-list" data-render="classes"></ul>
+    </div></section>
+
+    <section class="section section--tint"><div class="container">
+      <p class="dev-label">join.html: class summary cards</p>
+      <ul class="card-grid summary-grid" data-render="class-summary"></ul>
+      <p class="dev-label" style="margin-top:2rem">volunteer.html: subject list</p>
+      <ul data-render="class-list"></ul>
+    </div></section>
+
+    <p class="container dev-label" style="margin-top:2rem">classes.html: gallery and samples (empty = nothing below)</p>
+    <div data-render="gallery"></div>
+    <div data-render="samples"></div>
+
+    <p class="container dev-label" style="margin-top:2rem">impact.html: feedback + testimonials (empty = nothing below)</p>
+    <div data-render="feedback"></div>
+    <div data-render="testimonials"></div>
+
+    <section class="section section--tint"><div class="container">
+      <p class="dev-label">index.html / impact.html: stats</p>
+      <ul class="stats" data-render="stats"></ul>
+      <p class="dev-label" style="margin-top:2rem">fundraise.html: ideas</p>
+      <ul class="card-grid idea-grid" data-render="fundraise-ideas"></ul>
+    </div></section>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <nav class="data-toggle" aria-label="Dataset">
+    <a href="dev/worst-case.html?data=demo">Demo data</a>
+    <a href="dev/worst-case.html?data=worst">Worst case</a>
+    <a href="dev/worst-case.html?data=empty">Empty</a>
+  </nav>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/translations.js"></script>
+  <script>
+    (function () {
+      var mode = (/[?&]data=(\w+)/.exec(location.search) || [])[1] || 'worst';
+      document.querySelectorAll('.data-toggle a').forEach(function (a) {
+        if (a.getAttribute('href').indexOf('data=' + mode) !== -1) a.setAttribute('aria-current', 'true');
+      });
+      var C = window.SITE_CONFIG;
+      var T = window.TRANSLATIONS;
+      if (mode === 'demo') return;
+
+      if (mode === 'empty') {
+        C.classes = [];
+        C.founders = [];
+        C.fundraiseIdeas = [];
+        C.images.gallery = [];
+        C.curriculumSamples = [];
+        C.testimonials = [];
+        C.flags.showTestimonials = true; /* flag on, list empty: must still render nothing */
+        C.stats.cities = [];
+        return;
+      }
+
+      /* ---------- Worst case: plausible values, mixed across rows ---------- */
+      var longBio = 'Venkata is a high school senior who has volunteered as a math and science tutor since ninth grade, first at her local library\'s homework help program and later with students in Hyderabad and Vijayawada over Zoom. She plans to study biomedical engineering, with a minor in public health, and hopes to work on affordable medical devices for rural clinics. Outside of school she leads her robotics team\'s outreach program, teaches Kuchipudi to younger students on weekends, and coordinates the volunteer tutor schedule so that every session has two tutors present. She also maintains the curriculum packets for the science classes, rewriting each unit after feedback from tutors and families.';
+      C.founders = [
+        { name: 'Venkata Satya Sai Lakshmi Narasimha Prasanna Kumari Kantamneni', role: 'Cofounder, Science Lead and Volunteer Tutor Coordinator', grade: 12,
+          school: 'Thomas Jefferson High School for Science and Technology', bio: longBio, photo: C.images.founderRishita },
+        { name: 'J', role: 'Cofounder and Math Lead', grade: 9, school: 'South Forsyth High School', bio: 'J teaches math.', photo: C.images.founderShreyas },
+        { name: 'Jo', role: 'Cofounder and Python Lead', grade: 11, school: 'South Forsyth High School', bio: 'Jo likes building small games in Python and teaching loops with them.', photo: null }
+      ];
+
+      var eightTopics = ['Natural resources and how communities share them', 'Water and the water cycle', 'Air and weather', 'Soil and land', 'Pollution and waste', 'Recycling and conservation', 'Renewable and non-renewable energy sources', 'Biodiversity'];
+      var base = C.classes.slice();
+      var extra = [];
+      for (var i = 0; i < 7; i++) {
+        extra.push({
+          id: 'extra-' + i,
+          nameKey: 'class.extra' + i + '.name',
+          gradeKey: i % 2 ? 'grade.5' : 'grade.4and5',
+          subject: 'science',
+          focus: i === 0 ? 'Environmental Science and Sustainability for Young Learners' : (i === 3 ? 'Life Science' : null),
+          topics: i === 0 ? eightTopics : ['Reading'],
+          durationMinutes: [90, 45, 120, 60, 60, 75, 60][i],
+          signupOpen: i !== 2,
+          signupUrl: i === 4 ? 'https://forms.example.com/real-looking-signup-form-for-a-single-class' : null,
+          versions: i === 5
+            ? [{ language: 'English', day: 'Wednesday', timeIST: '10:30 AM to 12:00 PM' }]
+            : [{ language: 'Telugu', day: i % 2 ? 'Saturday' : 'Sunday', timeIST: '6:00 PM to 7:00 PM' },
+               { language: 'English', day: i % 2 ? 'Saturday' : 'Sunday', timeIST: '8:00 PM to 9:00 PM' }]
+        });
+      }
+      C.classes = base.concat(extra); /* 12 classes */
+      var names = [
+        ['Advanced Environmental Science and Sustainability Workshop', 'ఉన్నత ప్రాథమిక పాఠశాల విద్యార్థుల కోసం పర్యావరణ శాస్త్రం మరియు సుస్థిరత కార్యశాల'],
+        ['Art', 'కళ'],
+        ['Spoken English Practice for Telugu-Medium Students', 'తెలుగు మాధ్యమ విద్యార్థుల కోసం మాట్లాడే ఇంగ్లీష్ సాధన'],
+        ['Life Science Lab', 'జీవ శాస్త్ర ప్రయోగశాల'],
+        ['Reading Club', 'పఠన క్లబ్'],
+        ['Mental Math and Number Sense Challenge', 'మానసిక గణితం మరియు సంఖ్యా జ్ఞాన సవాలు'],
+        ['Chess', 'చదరంగం']
+      ];
+      names.forEach(function (n, i) { T.en['class.extra' + i + '.name'] = n[0]; T.te['class.extra' + i + '.name'] = n[1]; });
+      T.te['topic:Natural resources and how communities share them'] = 'సహజ వనరులు మరియు సమాజాలు వాటిని ఎలా పంచుకుంటాయి';
+      T.te['focus:Environmental Science and Sustainability for Young Learners'] = 'చిన్నారుల కోసం పర్యావరణ శాస్త్రం మరియు సుస్థిరత';
+
+      C.fundraiseIdeas = C.fundraiseIdeas.concat([
+        { title: 'Neighborhood Diwali, Sankranti and Ugadi celebrations with a donation table', examples: 'A table at a community celebration, with the organizers\' permission and a sign explaining where the money goes' },
+        { title: 'Art', examples: null }
+      ]);
+      C.stats.studentsTaught = '1,284';
+      C.stats.cities = ['Hyderabad', 'Vijayawada', 'Visakhapatnam', 'Tirupati', 'Rajahmundry'];
+      C.images.gallery = [];
+      C.curriculumSamples = [];
+      C.testimonials = [];
+      C.flags.showTestimonials = true; /* flag on, list empty: must still render nothing */
+    })();
+  </script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
