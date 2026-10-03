@@ -14,7 +14,6 @@ js/components.js       shared header and footer (written once, injected on every
 js/main.js             language toggle, menu, filters, schedule, FAQ, dialog, forms
 images/                logo, favicon, share image, placeholder SVGs (see "Swap images")
 images/packets/        where curriculum packet samples go (see its README.md)
-dev/                   developer tools only. Delete before launch (see below)
 robots.txt  sitemap.xml
 ```
 
@@ -54,10 +53,10 @@ Then open http://localhost:8000. The site uses classic `<script>` tags and keeps
 | `images.logoMark` | The logo mark file (icon only). One line to switch logos (see "Swap the logo") |
 | `images.appleTouchIcon` | 180x180 PNG home-screen icon |
 | `images.gallery` | `[{ src, alt, caption, width, height }]`. The Classes page gallery stays out of the page while this is empty. Never photos of children |
-| `schoolYear` | `{ start: 'June', end: 'April', status: 'sample, confirm' }`. Shown in "How classes work" and the FAQ |
-| `scheduleStatus` | Reminder that the schedule is a sample |
+| `schoolYear` | `{ start: 'June', end: 'April', status: 'confirmed' }`. Shown in "How classes work" and the FAQ |
+| `scheduleStatus` | Internal note: the schedule is confirmed. Not shown on any page |
 | `classes[*].focus` | Focus area shown on the class card (`null` = none). Science classes use it |
-| `classes[*].topicsStatus` | Notes that the science topics are drafts |
+| `classes[*].topicsStatus` | Internal note: the science topics are confirmed. Not shown on any page |
 | `classes[*].signupUrl` | Optional Google Form for one class; overrides `signupFormUrl` |
 | `classes[*].versions` | One entry per language, each with its own `day` and `timeIST` |
 | `signupFormUrl` | The parent sign-up Google Form. Placeholder: `[GOOGLE FORM URL]` |
@@ -141,9 +140,9 @@ To swap one, put the new file in `images/` and update its path in `SITE_CONFIG.i
 
 The header and footer show the logo mark as an image next to the words "Learn To Give". The words are real text in Fraunces, not part of the image, because web fonts do not load inside an SVG shown as an `<img>`.
 
-1. Open `dev/logo-picker.html` in a browser and flip through the three directions (keys 1, 2, 3).
+1. Open the three SVG files in `images/` (see "Swap images") to compare the directions.
 2. In `js/site-config.js`, change the one line `logoMark: 'images/logo-mark.svg'` to `'images/logo-mark-pencil.svg'` or `'images/logo-mark-sunrise.svg'`. The header and footer update right away.
-3. Rebuild the favicon, share image and touch icon from the new mark: `NODE_PATH="$(npm root -g)" node dev/render-brand-images.cjs` (needs Node and Playwright, not part of the site).
+3. Rebuild the favicon, share image and touch icon from the new mark. The script that did this was removed from the project with the `dev/` folder. It is still in the git history: `git show 9385ea4:dev/render-brand-images.cjs > render-brand-images.cjs`, then run it with `NODE_PATH="$(npm root -g)" node render-brand-images.cjs` (needs Node and Playwright, not part of the site), and delete it again afterwards.
 4. Update the `og:image:alt` / `twitter:image:alt` text in each page's `<head>`, which describes logo A.
 
 ## Duplicate a founder card
@@ -167,7 +166,7 @@ A new card appears on the About page automatically. For a Telugu role, add `'rol
 
 Each class in `SITE_CONFIG.classes` has an `id`, translation keys for its name and audience, an optional `focus`, `topics`, `durationMinutes`, `signupOpen`, an optional `signupUrl`, and a `versions` list with one entry per language (`language`, `day`, `timeIST`). The Telugu and English versions have different times. The Classes page cards, the "Weekly schedule at a glance" table, the Join page class cards and the Volunteer page subject list all update from this list. The All / Telugu / English filter on the Classes page applies to both the table and the cards.
 
-**The schedule rule.** The English version of one subject meets at the same time as the Telugu version of the other subject, then they trade. The sample schedule (all IST, to confirm):
+**The schedule rule.** The English version of one subject meets at the same time as the Telugu version of the other subject, then they trade. The confirmed schedule (all IST):
 
 | | Slot A: Saturdays 6:00 to 7:00 PM | Slot B: Saturdays 8:00 to 9:00 PM |
 | --- | --- | --- |
@@ -175,7 +174,7 @@ Each class in `SITE_CONFIG.classes` has an `id`, translation keys for its name a
 | 4th and 5th Grade Science | English | Telugu |
 | Intro to Python | Sundays, English 6:00 PM | Sundays, Telugu 8:00 PM |
 
-So a student who takes math and science in the same language never has a clash. After editing any time, run `node dev/check-schedule.cjs`: it fails if two same-language classes in different subjects overlap, or if a time can't be read. Write times as `6:00 PM to 7:00 PM`.
+So a student who takes math and science in the same language never has a clash. After editing any time, check by hand that no two same-language classes in different subjects overlap, and write times as `6:00 PM to 7:00 PM`. (An automatic checker lived in `dev/check-schedule.cjs`; it is in the git history at commit `9385ea4`.)
 
 ## Class times are anchored to IST
 
@@ -226,45 +225,31 @@ This README makes no claims about any host's pricing or exact screens, so check 
 
 ## Replace before launch
 
-- [ ] **Sign-up Google Form.** Paste it into `signupFormUrl` (placeholder `[GOOGLE FORM URL]`). Until then, Sign Up buttons go to the Contact page.
-- [ ] **Feedback Google Form.** Paste it into `feedbackFormUrl` (placeholder `[FEEDBACK FORM URL]`). First name only, with a permission-to-publish checkbox.
-- [ ] **Class schedule.** The Slot A / Slot B times are a sample (`classes[*].versions`). Confirm each version's day and time, then run `node dev/check-schedule.cjs`.
-- [ ] **School year.** June to April is a sample (`schoolYear`).
-- [ ] **Science topics.** Drafts; confirm them against the packets (`classes` science-4 and science-5, marked `topicsStatus`).
-- [ ] **Math and Python topics.** Samples to confirm (`classes[*].topics`).
-- [ ] **Intro to Python audience.** Assumed to be "4th and 5th grade" (`gradeKey: 'grade.4and5'`).
+**Confirmed by the founders (for now):** class schedule, school year, class topics and FAQ answers. Tell the team if any of them change.
+
+**On hold:** both Google Form links, until the URLs are ready.
+
+**Kept as placeholders on purpose:** every image (hero, founder portraits, class icons, gallery, packet samples).
+
+- [ ] **Sign-up Google Form (on hold).** Paste it into `signupFormUrl` (placeholder `[GOOGLE FORM URL]`). Until then, Sign Up buttons go to the Contact page.
+- [ ] **Feedback Google Form (on hold).** Paste it into `feedbackFormUrl` (placeholder `[FEEDBACK FORM URL]`). First name only, with a permission-to-publish checkbox.
+- [x] **Class schedule.** Confirmed (`classes[*].versions`).
+- [x] **School year.** Confirmed: June to April (`schoolYear`).
+- [x] **Class topics.** Confirmed (`classes[*].topics`).
+- [x] **FAQ answers.** Confirmed (`faq.a3`, `faq.a4`, `faq.a7` and the rest).
+- [ ] **Intro to Python audience.** Assumed to be "4th and 5th grade" (`gradeKey: 'grade.4and5'`). Not yet confirmed.
 - [ ] **Shreyas's new bio** (`founders`) and **the new founders' story** (`about.story` in `translations.js`, plus the no-JavaScript copy in `about.html`). Confirm the wording.
-- [ ] **Founder photos.** All three are initials placeholders.
 - [ ] **Fundraise "How it works".** Confirm it matches how you handle money raised (`fundraiseHowItWorks`).
-- [ ] **Curriculum packet samples.** Add real pages with all student information removed (`curriculumSamples`, `images/packets/`).
-- [ ] **Gallery images.** Optional (`images.gallery`). Never photos of children.
-- [ ] **Testimonials.** Currently none, and hidden. Only add real quotes collected with permission, first names only, then set `flags.showTestimonials: true`.
-- [ ] **FAQ answers written as reasonable defaults.** Confirm materials (including "a computer works best" for Python), what happens after a missed session, and whether students can switch versions (`faq.a3`, `faq.a4`, `faq.a7`).
 - [ ] **Volunteer "Preparation" text.** Confirm it matches what tutors actually do (`volunteer.prepBody`).
 - [ ] **Volunteer languages.** The Classes page says every tutor speaks both languages; the volunteer form still lets applicants pick Telugu, English or both. Decide which you want.
 - [ ] **Formspree endpoint.** Update `forms.endpoint` and the four `action=""` attributes. Set the notify email in the Formspree dashboard.
 - [ ] **Site URL and domain.** Update `siteUrl`, the canonical/OG tags in every page, `sitemap.xml` and `robots.txt`.
-- [ ] **Logo.** Direction A is live. To switch, see "Swap the logo".
-- [ ] **Total received.** Optional; it stays hidden while `null`.
-- [ ] **Social links.** Currently empty, so they are hidden.
-- [ ] **Hero image.** Placeholder (`images/hero.svg`).
-- [ ] **Every Telugu string.** Machine-translated, so it needs native-speaker review (see below). Afterwards, set `flags.showTeluguReviewNotice: false`.
+- [ ] **Telugu review.** Every Telugu string is machine-translated and needs native-speaker review (see below). Afterwards, set `flags.showTeluguReviewNotice: false`.
 - [ ] **Contact email in the noscript blocks.** If the email ever changes, find and replace it in every `.html` file as well as `site-config.js`.
-- [ ] **Delete the `dev/` folder** (see next section).
+- [ ] **Optional, hidden while empty:** testimonials (real quotes, first names only, then `flags.showTestimonials: true`), social links, total received, gallery images and curriculum packet samples (`images/packets/`). Never photos of children.
+- [ ] **Images (placeholders for now).** Hero (`images/hero.svg`), founder portraits and class icons stay placeholders until real ones are ready. Logo direction A is live; to switch, see "Swap the logo".
 
-## Delete before launch
-
-Everything in `dev/` is for building and testing only. None of it is linked from any page or listed in `sitemap.xml`. Delete the whole folder before launch:
-
-| File | What it is |
-| --- | --- |
-| `dev/logo-picker.html` | The three logo directions behind a picker |
-| `dev/worst-case.html` | Stress test: the real page sections fed worst-case data, with a Demo / Worst case / Empty toggle |
-| `dev/render-brand-images.cjs` | Rebuilds the favicon, share image and touch icon from the chosen logo |
-| `dev/check-schedule.cjs` | Fails if same-language classes in different subjects overlap |
-| `dev/verify-site.cjs` | Playwright checks for every page in both languages (links, forms, hidden sections, Discord, keyboard, reduced motion, file://) |
-
-If you want to keep using the checks after launch, move `check-schedule.cjs` and `verify-site.cjs` out of the published folder instead of deleting them.
+The `dev/` folder (logo picker, worst-case test page, schedule checker, Playwright checks, brand image renderer) has been deleted from the project. It is in the git history at commit `9385ea4` if you ever need it.
 
 ## Needs native-speaker review
 

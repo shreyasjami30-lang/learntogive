@@ -11,18 +11,18 @@
                              placeholder. Also find-and-replace it in the
                              form action="" attributes of volunteer.html,
                              contact.html, donate.html and fundraise.html.
-   - signupFormUrl ......... "[GOOGLE FORM URL]" is a placeholder. Until it
+   - signupFormUrl ......... ON HOLD until the Google Form link is ready.
+                             "[GOOGLE FORM URL]" is a placeholder. Until it
                              starts with https://, every "Sign Up" button
                              goes to contact.html instead.
-   - feedbackFormUrl ....... "[FEEDBACK FORM URL]" is a placeholder. The
+   - feedbackFormUrl ....... ON HOLD until the Google Form link is ready.
+                             "[FEEDBACK FORM URL]" is a placeholder. The
                              "Share your experience" button on the Impact
                              page stays hidden until it starts with https://.
-   - classes[*].versions ... SAMPLE schedule (Slot A / Slot B), confirm.
-                             Each version's day and timeIST can be edited
-                             on its own. Run dev/check-schedule.cjs after.
-   - schoolYear ............ June to April is a sample. Confirm.
-   - classes science-4/5 ... topics are DRAFTS. Confirm against the packets.
-   - classes[*].topics ..... math and Python topics are samples. Confirm.
+   - classes[*].versions ... CONFIRMED by the founders (schedule, school
+                             year, topics and FAQ answers). Tell the team
+                             if anything changes. Each version's day and
+                             timeIST can be edited on its own.
    - classes "python" ...... gradeKey assumes Intro to Python is for 4th
                              and 5th graders. Confirm.
    - founders[2].bio ....... Shreyas's bio is new. Confirm the wording.
@@ -44,7 +44,6 @@
    - images ................ hero, founders and class icons are
                              placeholders. The logo is direction A (see
                              images.logoMark).
-   - dev/ .................. delete the whole folder before launch.
    - All Telugu text in js/translations.js is MACHINE-TRANSLATED and needs
      review by a native speaker.
    ===================================================================== */
@@ -153,17 +152,17 @@
       }
     ],
 
-    /* Classes are year-long and follow the Indian school year. SAMPLE, confirm. */
-    schoolYear: { start: 'June', end: 'April', status: 'sample, confirm' },
+    /* Classes are year-long and follow the Indian school year. Confirmed. */
+    schoolYear: { start: 'June', end: 'April', status: 'confirmed' },
 
     /* Every class has a Telugu and an English version, each with its own time.
-       SAMPLE SCHEDULE, confirm. All times are IST.
+       Schedule confirmed by the founders. All times are IST.
          Slot A: Saturdays 6:00 PM to 7:00 PM
          Slot B: Saturdays 8:00 PM to 9:00 PM
        Rule: the English version of one subject meets at the same time as the
        Telugu version of the other subject, then they trade. A student who
        takes math and science in the same language never has a clash.
-       dev/check-schedule.cjs fails if an edit breaks that rule.
+       Check it by hand after any edit.
 
        Fields:
          focus ....... optional focus area shown on the card (null = none).
@@ -171,7 +170,7 @@
                        signupFormUrl below. Only used when it starts with https://.
          usEasternNote optional, internal reference only. Never shown on
                        family-facing pages. US clocks change seasonally. */
-    scheduleStatus: 'sample, confirm',
+    scheduleStatus: 'confirmed',
     classes: [
       {
         id: 'math-4',
@@ -179,7 +178,7 @@
         gradeKey: 'grade.4',
         subject: 'math',
         focus: null,
-        topics: ['Place value', 'Multiplication and division', 'Fractions', 'Word problems'], /* SAMPLE */
+        topics: ['Place value', 'Multiplication and division', 'Fractions', 'Word problems'],
         durationMinutes: 60,
         signupOpen: true,
         signupUrl: null,
@@ -195,7 +194,7 @@
         gradeKey: 'grade.5',
         subject: 'math',
         focus: null,
-        topics: ['Decimals', 'Fraction operations', 'Order of operations', 'Volume'], /* SAMPLE */
+        topics: ['Decimals', 'Fraction operations', 'Order of operations', 'Volume'],
         durationMinutes: 60,
         signupOpen: true,
         signupUrl: null,
@@ -211,8 +210,8 @@
         gradeKey: 'grade.4',
         subject: 'science',
         focus: 'Environmental Science',
-        topicsStatus: 'draft, confirm against the packets',
-        topics: ['Natural resources', 'Water and the water cycle', 'Air and weather', 'Soil and land', 'Pollution and waste', 'Recycling and conservation', 'Energy sources'], /* DRAFT */
+        topicsStatus: 'confirmed',
+        topics: ['Natural resources', 'Water and the water cycle', 'Air and weather', 'Soil and land', 'Pollution and waste', 'Recycling and conservation', 'Energy sources'],
         durationMinutes: 60,
         signupOpen: true,
         signupUrl: null,
@@ -228,8 +227,8 @@
         gradeKey: 'grade.5',
         subject: 'science',
         focus: 'Life Science',
-        topicsStatus: 'draft, confirm against the packets',
-        topics: ['Plant and animal structures', 'Life cycles', 'Food chains and food webs', 'Habitats and adaptations', 'Human body systems', 'Health and nutrition'], /* DRAFT */
+        topicsStatus: 'confirmed',
+        topics: ['Plant and animal structures', 'Life cycles', 'Food chains and food webs', 'Habitats and adaptations', 'Human body systems', 'Health and nutrition'],
         durationMinutes: 60,
         signupOpen: true,
         signupUrl: null,
@@ -245,7 +244,7 @@
         gradeKey: 'grade.4and5', /* ASSUMPTION: confirm who Intro to Python is for */
         subject: 'python',
         focus: null,
-        topics: ['Variables', 'Loops', 'If/else', 'Building small programs and games'], /* SAMPLE */
+        topics: ['Variables', 'Loops', 'If/else', 'Building small programs and games'],
         durationMinutes: 60,
         signupOpen: true,
         signupUrl: null,
