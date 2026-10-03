@@ -46,11 +46,31 @@
   --radius: 18px;
   --radius-lg: 28px;
   --shadow: 0 6px 20px rgba(90, 31, 27, 0.08);
-  --shadow-hover: 0 10px 28px rgba(90, 31, 27, 0.14);
   --focus: 3px solid var(--maroon);
   --space-section: clamp(3rem, 8vw, 5.5rem);
   --container: 72rem;
   --tap: 44px;
+
+  /* Motion tokens (emil-design-eng / apple-design). Named effects are labeled
+     where they are used, using the animation-vocabulary terms. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);       /* strong ease-out: UI responding to the user */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);   /* on-screen movement A to B */
+  /* Spring (damping 1.0, response 0.35s), sampled into linear() over 380ms so
+     plain CSS can play it: critically damped, no overshoot (apple-design default
+     for UI that did not follow a flick). Used only through @supports below, so
+     browsers without linear() keep --ease-out. */
+  --ease-spring: var(--ease-out);
+  --dur-press: 120ms;
+  --dur-fast: 180ms;
+  --dur-open: 380ms;
+  --dur-close: 200ms;
+
+  /* Translucent header material (apple-design): warm cream, not cold glass. */
+  --header-material: rgba(255, 248, 238, 0.86);
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root { --ease-spring: linear(0, 0.0693, 0.2121, 0.3689, 0.5128, 0.6339, 0.7307, 0.8054, 0.8617, 0.9034, 0.9339, 0.9559, 0.9716, 0.9828, 0.9906, 0.9961, 1); }
 }
 
 /* ---------- Reset and base ---------- */
@@ -62,6 +82,10 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-padding-top: 6rem;
+  /* mobile-native: no gray flash on tap; every control has its own :active state instead. */
+  -webkit-tap-highlight-color: transparent;
+  /* The page is a scrolling document, so pull-to-refresh stays (no overscroll-behavior here).
+     Inner scrollers (menu, dialog, schedule table, gallery) use "contain". */
 }
 
 body {
@@ -92,16 +116,20 @@ h1, h2, h3, h4 {
   margin: 0 0 0.75rem;
   font-weight: 700;
 }
-h1 { font-size: clamp(2.25rem, 7vw, 3.75rem); letter-spacing: -0.01em; }
-h2 { font-size: clamp(1.65rem, 4.5vw, 2.4rem); }
-h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
+/* apple-design typography: tracking tightens as size grows, body stays at 0.
+   Fraunces has an optical-size axis, so large headings get the display cut. */
+h1, h2, h3, h4 { font-optical-sizing: auto; text-wrap: balance; }
+h1 { font-size: clamp(2.25rem, 7vw, 3.75rem); letter-spacing: -0.022em; line-height: 1.08; }
+h2 { font-size: clamp(1.65rem, 4.5vw, 2.4rem); letter-spacing: -0.015em; line-height: 1.15; }
+h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); letter-spacing: -0.01em; }
+:lang(te) h1, :lang(te) h2, :lang(te) h3, :lang(te) h4 { letter-spacing: 0; }
+p, li { text-wrap: pretty; }
 h4 { font-size: 1.05rem; }
 
 p { margin: 0 0 1rem; }
 ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; }
 
 a { color: var(--terracotta-dark); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-a:hover { color: var(--terracotta-hover); }
 
 :focus-visible {
   outline: var(--focus);
@@ -156,20 +184,33 @@ a:hover { color: var(--terracotta-hover); }
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  /* Press feedback: scale 0.97 on :active, 120ms ease-out. Color is a 180ms ease. */
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease, transform var(--dur-press) var(--ease-out);
 }
 :lang(te) .btn { font-family: var(--font-telugu); font-weight: 700; }
-.btn:hover { transform: translateY(-1px); }
 .btn:focus-visible { outline: var(--focus); outline-offset: 3px; }
+/* Press / Tap feedback (animation-vocabulary): a subtle scale-down the moment a finger lands. */
+.btn:active:not([disabled]) { transform: scale(0.97); }
+
+/* mobile-native: controls fire click without the double-tap wait, and a long press
+   does not select their label. Content text stays selectable. */
+.btn, .lang-btn, .nav-toggle, .filter-btn, .accordion-trigger, .dialog-close, .primary-nav a, .choice {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lang-btn, .nav-toggle, .filter-btn, .dialog-close { transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-press) var(--ease-out); }
+.lang-btn:active, .nav-toggle:active, .filter-btn:active, .dialog-close:active { transform: scale(0.96); }
+.accordion-trigger:active, .primary-nav a:active { background: var(--tint); }
 
 .btn-primary { background: var(--terracotta-dark); color: var(--white); }
-.btn-primary:hover, .btn-primary:focus-visible { background: var(--terracotta-hover); color: var(--white); }
+.btn-primary:focus-visible { background: var(--terracotta-hover); color: var(--white); }
 
 .btn-secondary { background: var(--saffron); color: var(--maroon); border-color: var(--saffron); }
-.btn-secondary:hover, .btn-secondary:focus-visible { background: var(--saffron-hover); color: var(--maroon); }
+.btn-secondary:focus-visible { background: var(--saffron-hover); color: var(--maroon); }
 
 .btn-outline { background: transparent; color: var(--terracotta-dark); border-color: var(--terracotta-dark); }
-.btn-outline:hover, .btn-outline:focus-visible { background: var(--terracotta-dark); color: var(--white); }
+.btn-outline:focus-visible { background: var(--terracotta-dark); color: var(--white); }
 
 .btn-block { width: 100%; }
 .btn[disabled] { cursor: progress; opacity: 0.85; transform: none; }
@@ -194,6 +235,22 @@ a:hover { color: var(--terracotta-hover); }
   z-index: 50;
   background: var(--cream);
   border-bottom: 1px solid var(--border);
+  /* mobile-native: content under the notch in landscape stays clear of it. */
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+/* apple-design materials: a translucent, warm header that content scrolls under.
+   Heavier tint (86%) keeps maroon text at 9:1 or better even over the maroon banner. */
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .site-header {
+    background: var(--header-material);
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    backdrop-filter: blur(18px) saturate(1.6);
+    border-bottom-color: rgba(233, 214, 190, 0.7);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .site-header { background: var(--cream); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: var(--border); }
 }
 .header-inner {
   display: flex;
@@ -221,7 +278,6 @@ a:hover { color: var(--terracotta-hover); }
 .wordmark { gap: 0.55rem; letter-spacing: -0.01em; }
 .wordmark-mark { width: 2.25rem; height: 2.25rem; flex-shrink: 0; }
 @media (min-width: 48em) { .wordmark-mark { width: 2.5rem; height: 2.5rem; } }
-.wordmark:hover { color: var(--maroon); }
 :lang(te) .wordmark { font-family: var(--font-heading); }
 @media (min-width: 48em) { .wordmark { font-size: 1.5rem; } }
 
@@ -245,7 +301,6 @@ a:hover { color: var(--terracotta-hover); }
 }
 .lang-btn[lang="te"] { font-family: var(--font-telugu); }
 .lang-btn[aria-pressed="true"] { background: var(--maroon); color: var(--cream); }
-.lang-btn:hover:not([aria-pressed="true"]) { background: var(--tint); }
 .lang-btn:focus-visible { outline: 3px solid var(--terracotta-dark); outline-offset: -5px; border-radius: 999px; }
 .lang-btn[aria-pressed="true"]:focus-visible { outline-color: var(--saffron); }
 
@@ -263,9 +318,9 @@ a:hover { color: var(--terracotta-hover); }
   font: 700 0.9375rem/1 var(--font-body);
   cursor: pointer;
 }
-.nav-toggle:hover { background: var(--tint); }
 .nav-toggle-icon { display: inline-flex; flex-direction: column; gap: 4px; width: 18px; }
-.nav-toggle-icon span { height: 2px; background: currentColor; border-radius: 2px; transition: transform 0.2s ease, opacity 0.2s ease; }
+/* Menu icon: Morph from three bars to an X (State indication), on-screen movement so ease-in-out. */
+.nav-toggle-icon span { height: 2px; background: currentColor; border-radius: 2px; transition: transform 200ms var(--ease-in-out), opacity var(--dur-fast) var(--ease-out); }
 .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(2) { opacity: 0; }
 .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
@@ -281,7 +336,13 @@ a:hover { color: var(--terracotta-hover); }
 }
 
 .primary-nav { display: none; flex-basis: 100%; }
-.primary-nav.is-open { display: block; }
+.primary-nav.is-open {
+  display: block;
+  /* dvh: tracks the visible area as the phone's URL bar shows and hides. */
+  max-height: calc(100dvh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 .primary-nav ul { list-style: none; margin: 0; padding: 0.5rem 0 0.75rem; display: grid; gap: 0.25rem; }
 .primary-nav a {
   display: flex;
@@ -293,7 +354,6 @@ a:hover { color: var(--terracotta-hover); }
   font-weight: 700;
   text-decoration: none;
 }
-.primary-nav a:hover { background: var(--tint); color: var(--maroon); }
 .primary-nav a[aria-current] { background: var(--saffron); color: var(--maroon); }
 
 /* JS off: the injected header never appears, so nothing to hide. */
@@ -323,7 +383,7 @@ main { display: block; }
 .section--tint a:not(.btn) { color: var(--maroon); }
 /* --terracotta-dark is only 4.35:1 on --tint, so outline buttons switch to maroon there. */
 .section--tint .btn-outline { color: var(--maroon); border-color: var(--maroon); }
-.section--tint .btn-outline:hover, .section--tint .btn-outline:focus-visible { background: var(--maroon); color: var(--cream); }
+.section--tint .btn-outline:focus-visible { background: var(--maroon); color: var(--cream); }
 .section-intro { max-width: 42rem; font-size: 1.125rem; }
 .lead { font-size: clamp(1.125rem, 2.6vw, 1.35rem); max-width: 44rem; }
 .page-hero { padding: clamp(2.5rem, 7vw, 4.5rem) 0 clamp(1.5rem, 4vw, 2.5rem); }
@@ -368,8 +428,7 @@ main { display: block; }
 .feature-card p:last-child { margin-bottom: 0; }
 
 .link-arrow { font-weight: 800; display: inline-flex; align-items: center; min-height: var(--tap); gap: 0.35rem; }
-.link-arrow::after { content: '→'; transition: transform 0.2s ease; }
-.link-arrow:hover::after { transform: translateX(3px); }
+.link-arrow::after { content: '→'; transition: transform var(--dur-fast) ease; } /* Hover effect: 3px Translate nudge, pointer devices only. */
 
 /* ---------- Stats ---------- */
 .stats { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
@@ -425,7 +484,6 @@ main { display: block; }
 .banner-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; position: relative; z-index: 1; }
 @media (min-width: 48em) { .banner-actions { align-items: center; } }
 .banner-link { color: var(--cream); font-weight: 800; display: inline-flex; align-items: center; min-height: var(--tap); }
-.banner-link:hover { color: var(--saffron-hover); }
 .banner-link:focus-visible { outline-color: var(--saffron); }
 /* Light banner: cream card instead of maroon, for a secondary call to action. */
 .banner--light { background: var(--white); color: var(--brown); border: 1px solid var(--border); box-shadow: var(--shadow); }
@@ -461,7 +519,6 @@ main { display: block; }
 }
 :lang(te) .filter-btn { font-family: var(--font-telugu); }
 .filter-btn[lang="te"] { font-family: var(--font-telugu); }
-.filter-btn:hover { background: var(--tint); }
 .filter-btn[aria-pressed="true"] { background: var(--maroon); color: var(--cream); }
 .filter-btn[aria-pressed="true"]:focus-visible { outline-color: var(--terracotta-dark); }
 
@@ -646,14 +703,14 @@ main { display: block; }
   cursor: pointer;
 }
 :lang(te) .accordion-trigger { font-family: var(--font-telugu); font-weight: 700; }
-.accordion-trigger:hover { background: var(--tint); }
 .accordion-trigger:focus-visible { outline-offset: -4px; border-radius: var(--radius); }
 .accordion-icon { flex-shrink: 0; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--saffron); position: relative; }
 .accordion-icon::before, .accordion-icon::after {
   content: ''; position: absolute; left: 50%; top: 50%;
   width: 0.75rem; height: 2px; background: var(--maroon);
   transform: translate(-50%, -50%);
-  transition: transform 0.2s ease;
+  /* Plus to minus: Rotate (State indication), on-screen movement so ease-in-out. */
+  transition: transform 200ms var(--ease-in-out);
 }
 .accordion-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
 .accordion-trigger[aria-expanded="true"] .accordion-icon::after { transform: translate(-50%, -50%) rotate(0deg); }
@@ -703,7 +760,9 @@ input[type="text"], input[type="email"], input[type="tel"], select, textarea {
   border-radius: var(--radius-sm);
   background: var(--white);
   color: var(--brown);
-  font: 1.0625rem/1.4 var(--font-body);
+  /* mobile-native: never below 16px, or iOS zooms the page on focus. */
+  font: max(16px, 1.0625rem)/1.4 var(--font-body);
+  transition: border-color var(--dur-fast) ease;
 }
 :lang(te) input, :lang(te) select, :lang(te) textarea { font-family: var(--font-telugu); }
 textarea { min-height: 8rem; resize: vertical; }
@@ -727,7 +786,6 @@ legend { padding: 0; margin-bottom: 0.35rem; }
   font-weight: 600;
   color: var(--brown);
 }
-.choice:hover { border-color: var(--terracotta); }
 .choice input { width: 1.35rem; height: 1.35rem; margin: 0; accent-color: var(--terracotta-dark); flex-shrink: 0; }
 .choice input:focus-visible { outline: var(--focus); outline-offset: 3px; }
 .fieldset.has-error .choice, fieldset.has-error .choice { border-color: var(--error); }
@@ -764,7 +822,8 @@ legend { padding: 0; margin-bottom: 0.35rem; }
 /* ---------- Dialog ---------- */
 dialog {
   width: min(36rem, calc(100vw - 2rem));
-  max-height: calc(100dvh - 2rem);
+  max-height: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overscroll-behavior: contain;
   border: 0;
   border-radius: var(--radius-lg);
   padding: 0;
@@ -786,12 +845,10 @@ dialog::backdrop { background: rgba(59, 42, 36, 0.55); }
   cursor: pointer;
   flex-shrink: 0;
 }
-.dialog-close:hover { background: var(--tint); }
 
 /* ---------- Footer ---------- */
-.site-footer { background: var(--maroon); color: var(--cream); padding: 3rem 0 2rem; }
+.site-footer { background: var(--maroon); color: var(--cream); padding: 3rem env(safe-area-inset-right, 0px) calc(2rem + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px); }
 .site-footer a { color: var(--cream); }
-.site-footer a:hover { color: var(--saffron-hover); }
 .site-footer :focus-visible { outline-color: var(--saffron); }
 .footer-inner { display: grid; gap: 2rem; }
 @media (min-width: 48em) { .footer-inner { grid-template-columns: 1.2fr 1fr 1fr; } }
@@ -805,9 +862,32 @@ dialog::backdrop { background: rgba(59, 42, 36, 0.55); }
 :lang(te) .footer-heading { text-transform: none; letter-spacing: 0; font-family: var(--font-telugu); }
 .footer-nav ul, .footer-social ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
 .footer-nav a, .footer-social a { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: none; }
-.footer-nav a:hover, .footer-social a:hover { text-decoration: underline; }
 .footer-nav a[aria-current="page"] { text-decoration: underline; font-weight: 800; }
 .footer-disclaimer { grid-column: 1 / -1; border-top: 1px solid rgba(255, 248, 238, 0.25); padding-top: 1.5rem; margin: 0; font-size: 0.9375rem; }
+
+/* ---------- Hover (pointer devices only) ----------
+   mobile-native: touch screens fake :hover on tap and leave it stuck, so every
+   hover style lives behind this capability query. Touch gets :active instead. */
+@media (hover: hover) and (pointer: fine) {
+  a:hover { color: var(--terracotta-hover); }
+  .btn-primary:hover { background: var(--terracotta-hover); color: var(--white); }
+  .btn-secondary:hover { background: var(--saffron-hover); color: var(--maroon); }
+  .btn-outline:hover { background: var(--terracotta-dark); color: var(--white); }
+  .wordmark:hover { color: var(--maroon); }
+  .lang-btn:hover:not([aria-pressed="true"]) { background: var(--tint); }
+  .nav-toggle:hover { background: var(--tint); }
+  .primary-nav a:hover { background: var(--tint); color: var(--maroon); }
+  .section--tint .btn-outline:hover { background: var(--maroon); color: var(--cream); }
+  .link-arrow:hover::after { transform: translateX(3px); }
+  .banner-link:hover { color: var(--saffron-hover); }
+  .filter-btn:hover { background: var(--tint); }
+  .accordion-trigger:hover { background: var(--tint); }
+  .choice:hover { border-color: var(--terracotta); }
+  .dialog-close:hover { background: var(--tint); }
+  .site-footer a:hover { color: var(--saffron-hover); }
+  .footer-nav a:hover, .footer-social a:hover { text-decoration: underline; }
+  input[type="text"]:hover:not(:focus), input[type="email"]:hover:not(:focus), input[type="tel"]:hover:not(:focus), select:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--brown); }
+}
 
 /* ---------- Testimonials ---------- */
 .testimonial-grid { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
@@ -818,16 +898,111 @@ dialog::backdrop { background: rgba(59, 42, 36, 0.55); }
 /* ---------- 404 ---------- */
 .notfound-links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
-/* ---------- Motion ---------- */
-@media (prefers-reduced-motion: no-preference) {
-  .reveal { animation: rise 0.6s ease both; }
-  .card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .feature-card:hover, .class-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* ---------- Motion ----------
+   Approved by find-animation-opportunities, built with the animate skill.
+   Only transform and opacity move. Names follow animation-vocabulary.
+   Tokens: --ease-out, --ease-spring (critically damped spring as linear()),
+   --dur-press 120ms, --dur-fast 180ms, --dur-open 380ms, --dur-close 200ms. */
+/* review-animations removed two earlier effects:
+   - the Home hero's 600ms page-load rise (seen on every visit, over budget, no purpose);
+   - the hover lift on feature and class cards (they are not links, so lifting them
+     promised a click that does nothing). */
+
+/* Donate dialog: Scale in + Fade in (Enter), with a spring (damping 1.0, no Bounce).
+   Centered on purpose: modals are exempt from Origin-aware animation.
+   Exit is faster than the entrance (200ms ease-out) and shrinks less (0.98).
+   transition-behavior: allow-discrete keeps the dialog in the top layer while it
+   fades out; browsers without it simply close instantly. */
+dialog {
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity var(--dur-close) var(--ease-out),
+    transform var(--dur-close) var(--ease-out),
+    overlay var(--dur-close) allow-discrete,
+    display var(--dur-close) allow-discrete;
 }
+dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 240ms var(--ease-out),
+    transform var(--dur-open) var(--ease-spring),
+    overlay var(--dur-open) allow-discrete,
+    display var(--dur-open) allow-discrete;
+}
+@starting-style {
+  dialog[open] { opacity: 0; transform: scale(0.96); }
+}
+/* Backdrop: Fade in alongside the dialog so they read as one surface. */
+dialog::backdrop {
+  opacity: 0;
+  transition:
+    opacity var(--dur-close) var(--ease-out),
+    overlay var(--dur-close) allow-discrete,
+    display var(--dur-close) allow-discrete;
+}
+dialog[open]::backdrop { opacity: 1; transition-duration: 240ms; }
+@starting-style {
+  dialog[open]::backdrop { opacity: 0; }
+}
+
+/* Mobile menu: Slide in from the top + Fade in (Enter), spring easing.
+   Transform origin is the top edge, where the Menu button lives (Spatial consistency).
+   No exit animation: closing usually comes from tapping a link that leaves the page. */
+@media (max-width: 74.99em) {
+  .primary-nav.is-open {
+    transform-origin: top center;
+    /* 260ms: the same critically damped curve, compressed (a stiffer spring), so the
+       menu stays inside the 150-250ms dropdown budget in perceived time. */
+    transition: transform 260ms var(--ease-spring), opacity var(--dur-fast) var(--ease-out);
+  }
+  @starting-style {
+    .primary-nav.is-open { opacity: 0; transform: translateY(-8px); }
+  }
+}
+
+/* FAQ answer: Fade in + 4px Translate when its accordion opens (State indication).
+   No height animation (layout cost); closing stays instant. Scoped to .js, because
+   without JavaScript every answer is already open. */
+.js .accordion-panel:not([hidden]) {
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+@starting-style {
+  .js .accordion-panel:not([hidden]) { opacity: 0; transform: translateY(-4px); }
+}
+
+/* Form thank-you: Fade in + 8px rise (Enter). Rare, so it may take 300ms.
+   Form failure: Fade in only, 180ms; an error should not bounce or travel. */
+.form-success:not([hidden]) {
+  transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out);
+}
+.form-failure:not([hidden]) {
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+@starting-style {
+  .form-success:not([hidden]) { opacity: 0; transform: translateY(8px); }
+  .form-failure:not([hidden]) { opacity: 0; }
+}
+
+/* Reduced motion: fewer and gentler, not zero. Every transform-based movement is
+   removed; opacity fades that explain a change stay, shortened to 150ms. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-  .btn:hover { transform: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  .btn:active, .lang-btn:active, .nav-toggle:active, .filter-btn:active, .dialog-close:active { transform: none; }
+  .link-arrow::after, .nav-toggle-icon span { transition: none; }
+  .link-arrow:hover::after { transform: none; }
+  dialog, dialog[open] { transform: none; transition-property: opacity, overlay, display; transition-duration: 150ms; }
+  dialog[open]::backdrop { transition-duration: 150ms; }
+  @starting-style {
+    dialog[open] { transform: none; }
+    .primary-nav.is-open { transform: none; }
+    .js .accordion-panel:not([hidden]) { transform: none; }
+    .form-success:not([hidden]) { transform: none; }
+  }
+  .primary-nav.is-open { transition: opacity 150ms var(--ease-out); }
+  .js .accordion-panel:not([hidden]) { transition: opacity 150ms var(--ease-out); }
+  .form-success:not([hidden]) { transition: opacity 150ms var(--ease-out); }
 }
 
 /* ---------- Small utilities ---------- */
